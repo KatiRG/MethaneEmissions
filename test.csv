@@ -1,0 +1,17 @@
+2003-2012	CH4		budget	per	category
+proc	stats	Bor_NAme	contUSA	Cent_NAme	Trop_SAme
+Wetlands	mean	13	8	2	47
+Wetlands	min	7	6	2	30
+Wetlands	max	21	9	2	61
+OtherNat	mean	2	2	1	7
+OtherNat	min	1	1	1	5
+OtherNat	max	2	4	1	8
+Agriwast	mean	3	17	5	21
+Agriwast	min	2	15	6	19
+Agriwast	max	3	23	7	24
+Fossil	mean	2	11	2	5
+Fossil	min	1	9	1	1
+Fossil	max	2	15	3	8
+BioBurBiof	mean	1	0	1	6
+BioBurBiof	min	1	0	0	3
+BioBurBiof	max	1	1	1	7
