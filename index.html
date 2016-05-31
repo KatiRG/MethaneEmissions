@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="lib/d3.v3.min.js"></script>
+<script src="lib/jquery-1.10.2.min.js"></script>
+<!--bootstrap 3.0.2 -->
+<link href="lib/bootstrap.css" rel="stylesheet">
+<script src="lib/bootstrap.min.js"></script>
+<link href="lib/sticky-footer-navbar.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="lib/colorbrewer.js"></script>
+
+<title>Methane Budget</title>
+
+<body>
+  <div id="wrap">
+
+    <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Methane Budget</a>
+          </div>
+        </div>
+      </div>
+ 
+    <!-- Begin page content -->
+    <div class="container">    
+
+      <div id="infotext" style="width: 700px;"></div>      
+
+      <p id="chart"></p>
+
+      <script src="sankey.js"></script>
+      <script>
+        // Sankey diagram with highlight and tooltip
+        // http://bost.ocks.org/mike/sankey/
+        // http://bl.ocks.org/git-ashish/8959771
+
+        var whichCountry; //for histograms
+
+        var margin = {
+            top: 100,
+            right: 10,
+            bottom: 10,
+            left: 10
+          },
+          width = 1100 - margin.left - margin.right,
+          height = 700 - margin.top - margin.bottom;
+
+        var formatNumber = d3.format(".2f"),
+          format = function(d) {
+            return formatNumber(d);
+          },
+          color = d3.scale.category20();
+
+        // append the svg canvas to the page
+        var svg = d3.select("#chart").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+        // create svg for sorted column
+        var svg2 = d3.select("#sortCol").append("svg")
+          .attr("width", 200 + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+        // set the sankey diagram properties
+        var sankey = d3.sankey()
+          .nodeWidth(20)
+          .nodePadding(10)
+          .size([width, height]);
+
+        var path = sankey.link();
+        
+        var col_xcoord = []; //x-coords of Sankey cols to avoid hard-coding value in sortButton click
+
+        //var units = "Tg C yr <sup>-1</sup>";
+        var units = "[units]"; 
+
+        Coal_color = "#3B3131";
+        Oil_color = "#886666";
+        Gas_color = "#AEC7E8";
+        GasFlaring_color = "#AEC7E8";
+        Cement_color = "#666688";
+
+        //https://www.colorcodehex.com/eff3ff/
+        var colour_dict = {
+            //regions
+            "Bor_NAme": "#CBD8FF", "contUSA": "#c6dbef", "Cent_NAme": "#9ecae1", 
+            "Trop_SAme": "#6baed6", "Temp_SAme": "#4292c6", "Temp_SAme": "#2171b5", 
+            "NAfr": "#084594", "SAfr": "#B1C5FF", "Russia": "#658DFF", 
+            "Oceania": "#3368FF", "Europe": "#003BE4", "China": "#002798", 
+            "India": "#001A66", "SE_Asia": "#000D32", "Temp_Eurasia_Japan": "#E5ECFF", 
+            "GLO": " #7FA0FF",
+            //sources
+            "Agriwast": "#f1eef6", "BioBurBiof": "#d7b5d8", "Fossil": "#df65b0",
+            "OtherNat": "#dd1c77", "Wetlands": "#980043"
+        };
+
+        // load the data          
+        d3.json("Sankey_TD_2003-2012_25MAy2016_means.json", function(error, graph) {
+          make(graph);
+        });
+
+        function make(graph) {
+          // Display info text for Sankey diagram
+
+          d3.select("#infotext").html("Le bilan des sources de méthane est vu par deux approches, l'approche Bottom-up (BU) et l'approche Top-Down TD. Les sources sont divisées en 5 catégories. Les valeurs réprésentent les estimations des means.")
+            .style("display", "block");
+          
+          var nodeMap = {};
+          graph.nodes.forEach(function(x) {
+            nodeMap[x.name] = x;
+          });
+          graph.links = graph.links.map(function(x) {
+            return {
+              source: nodeMap[x.source],
+              target: nodeMap[x.target],
+              value: x.value
+            };
+          });
+
+          graph.nodes.sort(function(a, b) {
+            return d3.descending(a.value, b.value);
+          });
+
+          sankey
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .layout(32);
+
+          // tooltip div
+          var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+          // add in the links
+          var link = svg.append("g").selectAll(".link")
+            .data(graph.links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("d", path)
+            .attr("id", function (d, i) {
+              d.id = i;
+              return "link-" + i;
+            })
+            .style("stroke-width", function (d) {
+              return Math.max(1, d.dy);
+            })
+            .style("stroke", function (d) {
+              return colour_dict[d.source.name];
+            })
+            .sort(function(a, b) {
+              return b.dy - a.dy;
+            });
+
+          // add the link tooltip
+          link.on("mouseover", function(d) {
+              div.transition()
+                .style("opacity", .9);
+              div.html(d.source.name + ": " + d.target.name +
+                  "<br><b>" + format(d.value) + " " + units + "</b>")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px");
+            })
+            .on("mouseout", function(d) {
+              div.transition()
+                .style("opacity", 0);
+            });
+
+          // add in the nodes
+          var node = svg.append("g").selectAll(".node")
+            .data(graph.nodes)
+            .enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+              col_xcoord.push(d.x); //x-coord of each Sankey col
+              return "translate(" + d.x + "," + d.y + ")";
+            })
+            .on("click", highlight_node_links);
+          col_xcoord = uniques(col_xcoord);
+
+          // add the rectangles for the nodes
+          node.append("rect")
+            .attr("height", function (d) {
+              return d.dy;
+            })
+            .attr("width", sankey.nodeWidth())
+            .style("fill", function (d, idx) {              
+              return colour_dict[d.name];
+            })
+            .style("stroke-width", "2px")
+            .style("stroke", "#555");
+
+          // add the node tooltip
+          node.on("mouseover", function(d) {
+              div.transition()
+                .style("opacity", .9);
+              div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px");
+            })
+            .on("mouseout", function(d) {
+              div.transition()
+                .style("opacity", 0);
+            });
+
+          // add in the title for the nodes
+          node.append("text")
+            .attr("x", -6)
+            .attr("y", function(d) {
+              return d.dy / 2;
+            })
+            .attr("dy", ".35em")
+            .attr("text-anchor", "end")
+            .attr("transform", null)
+            .text(function(d) {
+              return d.name;
+            })
+            .filter(function(d) {
+              return d.x < width / 2;
+            })
+            .attr("x", 6 + sankey.nodeWidth())
+            .attr("text-anchor", "start");
+
+          
+
+          //=================================================
+          // FUNCTIONS
+          //=================================================
+          // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+          function uniques(arr) {
+            var a = [];
+            for (var i = 0, l = arr.length; i < l; i++)
+              if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
+                a.push(arr[i]);
+            return a;
+          }
+
+          // http://bl.ocks.org/git-ashish/8959771
+          function highlight_node_links(node, i) {
+
+            var remainingNodes = [],
+              nextNodes = [];
+
+            var stroke_opacity = 0;
+            if (d3.select(this).attr("data-clicked") == "1") {
+              d3.select(this).attr("data-clicked", "0");
+              stroke_opacity = 0.5;
+            } else {
+              d3.select(this).attr("data-clicked", "1");
+              stroke_opacity = 1.0;
+            }
+
+            var traverse = [{
+              linkType: "sourceLinks",
+              nodeType: "target"
+            }, {
+              linkType: "targetLinks",
+              nodeType: "source"
+            }];
+
+            traverse.forEach(function(step) {
+              node[step.linkType].forEach(function(link) {
+                remainingNodes.push(link[step.nodeType]);
+                highlight_link(link.id, stroke_opacity);
+              });
+
+              while (remainingNodes.length) {
+                nextNodes = [];
+                remainingNodes.forEach(function(node) {
+                  node[step.linkType].forEach(function(link) {
+                    nextNodes.push(link[step.nodeType]);
+                    highlight_link(link.id, stroke_opacity);
+                  });
+                });
+                remainingNodes = nextNodes;
+              }
+            });
+          }
+
+          function highlight_link(id, opacity) {
+            d3.select("#link-" + id).style("stroke-opacity", opacity);
+          }
+
+        } // end fn make(graph)
+
+      </script>
+
+    </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.wrap -->
+
+  <!--<div id="footer">
+    <div class="container">
+      <p class="text-muted credit"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span> &nbsp;<img src="LSCE_Icon.png" title="Climate and Environment Sciences Laboratory" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version 1.3 - 2016/02/05 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Authors: Cathy Nangini, Patrick Brockmann.</p>
+
+    </div>
+  </div>-->
+
+</body>
+
+</html>
