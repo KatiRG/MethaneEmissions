@@ -44,13 +44,14 @@
         // http://bl.ocks.org/git-ashish/8959771
 
         //Top-down Sankey
-        chart_div = "#chart_TD";
-        jsonFile = "Sankey_TD_2003-2012_25MAy2016_means.json"
-        makeSankey(chart_div, jsonFile);
+        var chart_div1 = "#chart_TD",
+            jsonFile1 = "Sankey_TD_2003-2012_25MAy2016_means.json";
+        makeSankey(chart_div1, jsonFile1);
 
         //Bottum-up Sankey
-        chart_div = "#chart_BU";
-        makeSankey(chart_div, jsonFile);
+        var chart_div2 = "#chart_BU",
+            jsonFile2 = "Sankey_BU_2003-2012_25MAy2016.json";
+        makeSankey(chart_div2, jsonFile2);
 
         function makeSankey(chart_div, jsonFile) {
           var margin = {
@@ -73,7 +74,7 @@
           var svg = d3.select(chart_div).append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .style("border", "1px solid black")
+            //.style("border", "1px solid black")
             .append("g")
             .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
@@ -124,9 +125,9 @@
             "Temp_Eurasia_Japan": "#E5ECFF",
             "GLO": " #7FA0FF",
             //sources
-            "Agriwast": "#f1eef6",
-            "BioBurBiof": "#d7b5d8",
-            "Fossil": "#df65b0",
+            "Agriwast": "#7558A6",
+            "BioBurBiof": "#b0df65",
+            "Fossil": "#65dfd1",
             "OtherNat": "#dd1c77",
             "Wetlands": "#980043"
           };
@@ -139,7 +140,7 @@
           function make(graph) {
             // Display info text for Sankey diagram
 
-            d3.select("#infotext").html("Le bilan des sources de méthane est vu par deux approches, l'approche Bottom-up (BU) et l'approche Top-Down TD. Les sources sont divisées en 5 catégories. Les valeurs réprésentent les estimations des means.")
+            d3.select("#infotext").html("Le bilan des sources de méthane est vu par deux approches, l'approche Bottom-up (BU) (droit) et l'approche Top-Down TD (gauche). Les sources sont divisées en 5 catégories. Les valeurs réprésentent les estimations des means.")
               .style("display", "block");
 
             var nodeMap = {};
