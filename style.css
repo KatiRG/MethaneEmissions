@@ -133,19 +133,6 @@
 
   }
 
-  #Mchart {
-    position: relative;
-    top: 100px;
-    height: 600px;
-  }
-
-  #Mmap {
-    position: relative;
-    top: -725px;
-    left: 651px;
-    height: 600px;
-  }
-
   .background {
     fill: none;
     pointer-events: all;
