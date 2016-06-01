@@ -227,7 +227,7 @@
               .attr("transform", function(d) {
                 col_xcoord.push(d.x); //x-coord of each Sankey col
                 return "translate(" + d.x + "," + d.y + ")";
-              })
+              })             
               .on("click", highlight_node_links)
               .call(function () {
                 manualLayout();
@@ -252,6 +252,10 @@
 
             // add the node tooltip
             node.on("mouseover", function(d) {
+              // console.log("d: ", d)
+              // console.log("this: ", this)
+              //d3.selectAll(".node")               
+
                 div.transition()
                   .style("opacity", .9);
                 div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
@@ -332,6 +336,7 @@
             return a;
           }
 
+
           // http://bl.ocks.org/git-ashish/8959771
           function highlight_node_links(node, i) {
 
@@ -339,12 +344,14 @@
               nextNodes = [];
 
             var stroke_opacity = 0;
-            if (d3.select(this).attr("data-clicked") == "1") {
+            if (d3.select(this).attr("data-clicked") == "1") {              
               d3.select(this).attr("data-clicked", "0");
               stroke_opacity = 0.5;
+              stroke_opacity_clicked = 0.5;
             } else {
               d3.select(this).attr("data-clicked", "1");
               stroke_opacity = 1.0;
+              stroke_opacity_clicked = 0.2;
             }
 
             var traverse = [{
@@ -374,8 +381,22 @@
             });
           }
 
-          function highlight_link(id, opacity) {
-            d3.select("#link-" + id).style("stroke-opacity", opacity);
+          function highlight_link(id, opacity) {            
+            //Classify highlighted links as "clicked"
+            //then toggle off on subsequent click
+            var clickedFlag;
+            if (d3.select(chart_div).select("#link-" + id).classed("clicked") === true) clickedFlag = false;
+            else clickedFlag = true;
+            
+            //Highlight links
+            d3.select(chart_div).select("#link-" + id).style("stroke-opacity", opacity)
+              .classed("clicked", clickedFlag);
+
+            //Reduce opacity of links not part of highlight group
+            //then toggle back to original opacity on subsequent click
+            d3.selectAll(".link:not(." + "clicked" + ")")
+              .style("stroke-opacity", stroke_opacity_clicked);
+            
           }
 
         } // end fn make(graph)
