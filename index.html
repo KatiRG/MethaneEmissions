@@ -260,7 +260,7 @@
                   .style("opacity", .9);
                 div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
                   .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY) + "px");
+                  .style("top", (d3.event.pageY - 60) + "px");
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {                
