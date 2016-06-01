@@ -198,6 +198,9 @@
 
             // add the link tooltip
             link.on("mouseover", function(d) {
+              //Reduce opacity of all but link that is moused over
+              d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
+
                 div.transition()
                   .style("opacity", .9);
                 div.html(d.source.name + ": " + d.target.name +
@@ -206,6 +209,8 @@
                   .style("top", (d3.event.pageY) + "px");
               })
               .on("mouseout", function(d) {
+                //Restore opacity
+                d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 1)
                 div.transition()
                   .style("opacity", 0);
               });
