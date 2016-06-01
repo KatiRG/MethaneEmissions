@@ -132,6 +132,9 @@
             "Wetlands": "#980043"
           };
 
+          //class labels for category  nodes only
+          var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
+
           // load the data          
           d3.json(jsonFile, function(error, graph) {
             make(graph);
@@ -189,7 +192,8 @@
                 return b.dy - a.dy;
               })
               .call(function () {
-                manualLayout();
+                console.log("call manualLayout for ", chart_div)
+                manualLayout(chart_div);
               });
 
             // add the link tooltip
@@ -211,11 +215,20 @@
               .data(graph.nodes)
               .enter().append("g")
               .attr("class", "node")
+              .attr("class", function (d) {
+                if (categories.indexOf(d.name) != -1) return "class-sources";
+              })
               .attr("transform", function(d) {
                 col_xcoord.push(d.x); //x-coord of each Sankey col
                 return "translate(" + d.x + "," + d.y + ")";
               })
-              .on("click", highlight_node_links);
+              .on("click", highlight_node_links)
+              .call(d3.behavior.drag() //Turn back on when you need to adjust a node
+                .origin(function(d) { return d; })
+                // .on("dragstart", function() { //Does not seem to be necessary...
+                //  this.parentNode.appendChild(this); })
+                .on("drag", dragmove)
+               );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
@@ -260,6 +273,64 @@
               })
               .attr("x", 6 + sankey.nodeWidth())
               .attr("text-anchor", "start");
+
+            // the function for moving the nodes
+            function dragmove(d) {
+              // console.log("d in dragmove: ", d)
+              // console.log("this: ", this)
+              // console.log("height - d.dy: ", height - d.dy)
+              // console.log("d3.event.y: ", d3.event.y)
+              d3.select(this).attr("transform", 
+                  "translate(" + (
+                             d.x = d.x
+                    ) + "," + (
+                             d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+                      ) + ")");
+              //console.log("d in link.attr: ", d)
+              console.log("link: ", link)
+              // console.log("their link[0][0] BEFORE: ", link[0][0])
+              // console.log("link.attr(d, path): ", link.attr("d", path))
+              
+              //move the attached links
+              sankey.relayout();
+              link.attr("d", path);
+              //console.log("their link[0][0] AFTER: ", link[0][0])
+            }
+
+            // manually customize node position
+          function manualLayout() {
+            console.log("in manual layout: ", chart_div)
+            console.log("select(chart_div): ", d3.select(chart_div).selectAll(".class-sources"))
+            var displacements = [36, 210, 296, 356, 507];
+            var displacement_dict = {
+              "Agriwast": 36, "OtherNat": 210, "BioBurBiof": 296, "Wetlands": 356,
+              "Fossil": 507
+            };
+            var link = d3.selectAll("path.link");
+            //http://stackoverflow.com/questions/10337640/how-to-access-the-dom-element-that-correlates-to-a-d3-svg-object
+            //displacements in order of foo nodes (foo[0][j])
+            //https://github.com/KatiRG/CO2Sankey/blob/2250a2ea976609f1a5326d5579ad2999ea787f70/index.html
+            // var displacements = [56,299,485,647,766, 55, 746, 307, 490, 612, 677, 429];
+
+            d3.select("#chart_TD").selectAll(".class-sources")  //here's how you get all the nodes
+              .each(function (d, idx) {
+                console.log("each d: ", d)
+                // console.log("each idx: ", idx)
+                // console.log("each this: ", this)
+                // console.log("each displacement_dict: ", displacement_dict[d.name])
+               
+               d3.select(this).attr("transform", 
+                    "translate(" + (
+                           d.x = d.x
+                  ) + "," + (
+                           d.y = displacement_dict[d.name]
+                    ) + ")");
+            });
+            
+                    
+            sankey.relayout();
+            link.attr("d", path);
+          }
 
           } //end makeSankey()
 
@@ -319,30 +390,6 @@
 
           function highlight_link(id, opacity) {
             d3.select("#link-" + id).style("stroke-opacity", opacity);
-          }
-
-          // manually customize node position
-          function manualLayout() {
-            console.log("call manual layout")
-            //http://stackoverflow.com/questions/10337640/how-to-access-the-dom-element-that-correlates-to-a-d3-svg-object
-            //displacements in order of foo nodes (foo[0][j])
-            //https://github.com/KatiRG/CO2Sankey/blob/2250a2ea976609f1a5326d5579ad2999ea787f70/index.html
-            // var displacements = [56,299,485,647,766, 55, 746, 307, 490, 612, 677, 429];
-            // var foo = d3.selectAll("g.node");
-            // for (j=0; j < displacements.length; j++) {
-            //   pickNode = foo[0][j]; //equals "this" in d3.behavior.drag()...on("dragstart")
-            //   d = graph.nodes[j];
-            //   d3.select(pickNode).attr("transform", 
-            //         "translate(" + (
-            //                d.x = d.x
-            //       ) + "," + (
-            //                d.y = displacements[j] //Math.max(0, Math.min(height - d.dy, d3.event.y))
-            //         ) + ")");
-           
-            // }               
-                    
-            // sankey.relayout();
-            // link.attr("d", path);
           }
 
         } // end fn make(graph)
