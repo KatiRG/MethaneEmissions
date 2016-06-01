@@ -339,13 +339,12 @@
 
           // http://bl.ocks.org/git-ashish/8959771
           function highlight_node_links(node, i) {
-            console.log("in highlight_node_links")
 
             var remainingNodes = [],
               nextNodes = [];
 
             var stroke_opacity = 0;
-            if (d3.select(this).attr("data-clicked") == "1") {
+            if (d3.select(this).attr("data-clicked") == "1") {              
               d3.select(this).attr("data-clicked", "0");
               stroke_opacity = 0.5;
               stroke_opacity_clicked = 0.5;
@@ -382,15 +381,15 @@
             });
           }
 
-          function highlight_link(id, opacity) {
+          function highlight_link(id, opacity) {            
             //Classify highlighted links as "clicked"
             //then toggle off on subsequent click
             var clickedFlag;
-            if (d3.select("#link-" + id).classed("clicked") === true) clickedFlag = false;
+            if (d3.select(chart_div).select("#link-" + id).classed("clicked") === true) clickedFlag = false;
             else clickedFlag = true;
             
             //Highlight links
-            d3.select("#link-" + id).style("stroke-opacity", opacity)
+            d3.select(chart_div).select("#link-" + id).style("stroke-opacity", opacity)
               .classed("clicked", clickedFlag);
 
             //Reduce opacity of links not part of highlight group
