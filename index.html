@@ -79,7 +79,7 @@
             .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
 
-          //Position BU Sankey beside TD Sankey   
+          //Position BU Sankey beside TD Sankey
           $('#chart_BU svg').css({
             top: 60,
             left: 790,
@@ -94,7 +94,7 @@
 
           var path = sankey.link();
 
-          var col_xcoord = []; //x-coords of Sankey cols to avoid hard-coding value in sortButton click
+          var col_xcoord = []; //x-coords of Sankey cols
 
           //var units = "Tg C yr <sup>-1</sup>";
           var units = "[units]";
@@ -108,27 +108,26 @@
           //https://www.colorcodehex.com/eff3ff/
           var colour_dict = {
             //regions
-            "Bor_NAme": "#CBD8FF",
-            "contUSA": "#c6dbef",
+            "Bor_NAme": "#C399D9",
+            "contUSA": "#A6D4FF",
             "Cent_NAme": "#9ecae1",
-            "Trop_SAme": "#6baed6",
-            "Temp_SAme": "#4292c6",
-            "Temp_SAme": "#2171b5",
-            "NAfr": "#084594",
-            "SAfr": "#B1C5FF",
-            "Russia": "#658DFF",
-            "Oceania": "#3368FF",
-            "Europe": "#003BE4",
-            "China": "#002798",
-            "India": "#001A66",
-            "SE_Asia": "#000D32",
-            "Temp_Eurasia_Japan": "#E5ECFF",
-            "GLO": " #7FA0FF",
+            "Trop_SAme": "#65dfd1",
+            "Temp_SAme": "#EA2B0D",
+            "NAfr": "#ffd880",
+            "SAfr": "#989F60",
+            "Russia": "#EACE75",
+            "Oceania": "#AAA993",
+            "Europe": "#FCAA70",
+            "China": "#7FA0FF",
+            "India": "#dd1c77",
+            "SE_Asia": "#ff80af",
+            "Temp_Eurasia_Japan": "#e0e67f",
+            "GLO": "#7558A6",
             //sources
-            "Agriwast": "#7558A6",
+            "Agriwast": "#886666", 
             "BioBurBiof": "#b0df65",
-            "Fossil": "#65dfd1",
-            "OtherNat": "#dd1c77",
+            "Fossil": "#3b3131",
+            "OtherNat": "#AEC7E8",
             "Wetlands": "#980043"
           };
 
@@ -186,7 +185,8 @@
                 return Math.max(1, d.dy);
               })
               .style("stroke", function(d) {
-                return colour_dict[d.source.name];
+                if (chart_div === "#chart_TD") return colour_dict[d.source.name];
+                else return colour_dict[d.target.name];
               })
               .sort(function(a, b) {
                 return b.dy - a.dy;
@@ -226,13 +226,11 @@
               .on("click", highlight_node_links)
               .call(function () {
                 manualLayout();
-              })
-              .call(d3.behavior.drag() //Turn back on when you need to adjust a node
-                .origin(function(d) { return d; })
-                // .on("dragstart", function() { //Does not seem to be necessary...
-                //  this.parentNode.appendChild(this); })
-                .on("drag", dragmove)
-               );
+              });
+              // .call(d3.behavior.drag() //moves nodes with mouse drag
+              //   .origin(function(d) { return d; })  
+              //   .on("drag", dragmove)
+              //  );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
@@ -280,28 +278,19 @@
 
             // the function for moving the nodes
             function dragmove(d) {
-              // console.log("d in dragmove: ", d)
-              // console.log("this: ", this)
-              // console.log("height - d.dy: ", height - d.dy)
-              // console.log("d3.event.y: ", d3.event.y)
               d3.select(this).attr("transform", 
                   "translate(" + (
                              d.x = d.x
                     ) + "," + (
                              d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
                       ) + ")");
-              //console.log("d in link.attr: ", d)
-              console.log("link: ", link)
-              // console.log("their link[0][0] BEFORE: ", link[0][0])
-              // console.log("link.attr(d, path): ", link.attr("d", path))
               
               //move the attached links
               sankey.relayout();
               link.attr("d", path);
-              //console.log("their link[0][0] AFTER: ", link[0][0])
             }
 
-            // manually customize node position
+          // manually customize node position
           function manualLayout() {
             var displacement_dict = {
               "Agriwast": 36, "OtherNat": 210, "BioBurBiof": 296, "Wetlands": 356,
@@ -319,8 +308,7 @@
                            d.y = displacement_dict[d.name]
                     ) + ")");
             });
-            
-                    
+               
             sankey.relayout();
             link.attr("d", path);
           }
