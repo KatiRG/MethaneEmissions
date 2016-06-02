@@ -45,12 +45,12 @@
 
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
-            jsonFile1 = "Sankey_TD_2003-2012_25MAy2016_means.json";
+            jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_means_noGLO.json";
         makeSankey(chart_div1, jsonFile1);
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-            jsonFile2 = "Sankey_BU_2003-2012_25MAy2016.json";
+            jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO.json";
         makeSankey(chart_div2, jsonFile2);
 
         function makeSankey(chart_div, jsonFile) {
@@ -122,7 +122,7 @@
             "India": "#dd1c77",
             "SE_Asia": "#ff80af",
             "Temp_Eurasia_Japan": "#e0e67f",
-            "GLO": "#7558A6",
+            //"GLO": "#7558A6",
             //sources
             "Agriwast": "#886666", 
             "BioBurBiof": "#b0df65",
@@ -306,7 +306,7 @@
           // manually customize node position
           function manualLayout() {
             var displacement_dict = {
-              "Agriwast": 36, "OtherNat": 210, "BioBurBiof": 296, "Wetlands": 356,
+              "Agriwast": 36, "OtherNat": 219, "BioBurBiof": 281, "Wetlands": 332,
               "Fossil": 507
             };
             var link = d3.selectAll("path.link");
