@@ -243,13 +243,13 @@
               //.on("click", highlight_node_links)
               .call(function() {
                 manualLayout();
-              })
-              .call(d3.behavior.drag() //moves nodes with mouse drag
-                .origin(function(d) {
-                  return d;
-                })
-                .on("drag", dragmove)
-              );
+              });
+              // .call(d3.behavior.drag() //moves nodes with mouse drag
+              //   .origin(function(d) {
+              //     return d;
+              //   })
+              //   .on("drag", dragmove)
+              // );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
