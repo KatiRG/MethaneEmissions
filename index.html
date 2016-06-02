@@ -51,6 +51,7 @@
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
             jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO.json";
+            //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_noOtherNat.json";            
         makeSankey(chart_div2, jsonFile2);
 
         function makeSankey(chart_div, jsonFile) {
@@ -96,8 +97,7 @@
 
           var col_xcoord = []; //x-coords of Sankey cols
 
-          //var units = "Tg C yr <sup>-1</sup>";
-          var units = "[units]";
+          var units = "Tg CH4 yr <sup>-1</sup>";          
 
           Coal_color = "#3B3131";
           Oil_color = "#886666";
@@ -186,7 +186,10 @@
               })
               .style("stroke", function(d) {
                 if (chart_div === "#chart_TD") return colour_dict[d.source.name];
-                else return colour_dict[d.target.name];
+                else {//no values for OtherNat in BU approach                  
+                  if (d.source.name === "OtherNat") return "#151515"; //dark grey
+                  else return colour_dict[d.target.name];
+                }
               })
               .sort(function(a, b) {
                 return b.dy - a.dy;
@@ -201,12 +204,21 @@
               //Reduce opacity of all but link that is moused over
               d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
 
+              //Tooltip
+              if (d.source.name === "OtherNat") {
+                div.transition()
+                  .style("opacity", .9);
+                div.html(d.source.name + ": " + d.target.name + " not affected<br>" )
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 60) + "px");
+              } else {
                 div.transition()
                   .style("opacity", .9);
                 div.html(d.source.name + ": " + d.target.name +
                     "<br><b>" + format(d.value) + " " + units + "</b>")
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY) + "px");
+                }
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -244,23 +256,30 @@
                 return d.dy;
               })
               .attr("width", sankey.nodeWidth())
-              .style("fill", function(d, idx) {
-                return colour_dict[d.name];
+              .style("fill", function(d, idx) {                
+                if (chart_div === "#chart_BU" && d.name === "OtherNat") return "#696969";
+                else return colour_dict[d.name];                
               })
               .style("stroke-width", "2px")
               .style("stroke", "#555");
 
             // add the node tooltip
             node.on("mouseover", function(d) {
-              // console.log("d: ", d)
-              // console.log("this: ", this)
-              //d3.selectAll(".node")                          
-
+              
+              //Tooltip
+              if (d.name === "OtherNat") {
+                div.transition()
+                  .style("opacity", .9);
+                div.html(d.name + ": regions not affected<br>" )
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 60) + "px");
+              } else {
                 div.transition()
                   .style("opacity", .9);
                 div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY - 60) + "px");
+                }
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {                
