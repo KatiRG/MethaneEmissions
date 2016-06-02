@@ -342,8 +342,11 @@
                            d.y = displacement_dict[d.name]
                     ) + ")");
             });
-               
-            sankey.relayout();
+
+            //Call only once
+            if (chart_div === "#chart_BU") sortRegions();
+
+             sankey.relayout();
             link.attr("d", path);
 
             // var delta = 10; //spacing between rects
@@ -389,9 +392,70 @@
             //     // return "translate(" + 0 + "," + yval[idx] + ")";
             //   });
 
-
-
           }
+
+          //Sorts region rects of TD chart and uses this order for BU chart
+          function sortRegions() {
+            var idx = 0;
+            var yheight = []; //array to store sorted rect height array
+            var yval = []; //array to store calculated ycoords
+            var ynames = []; //array to store sorted names
+            var store_place = []; //placeholder
+            delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
+            
+            // Sort the rect heights in descending order and store in array      
+            d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
+              .filter(function(d) {
+                               
+                if (d.x === col_xcoord[0]) { //select rects in last column (countries)
+                  yheight.push(d.dy);
+                  yheight.sort(sortDescending);
+                  return yheight;
+                }
+
+                function sortDescending(a, b) {
+                  return b - a; //use a - b to sort in increasing order
+                }
+              });
+
+            //Find names corresponding to yheight
+            //Used in last selection loop to find rank of rects
+            d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
+              .filter(function(d, i) {
+                if (d.x === col_xcoord[0]) { //selects last col (countries)
+                                    
+                  var idx_place = yheight.indexOf(d.dy); //order for sorted names
+                  //handle case when yheight contains two equal numbers
+                  if (store_place[idx_place] === -99) {
+                    idx_place = idx_place + 1; //need to find next available place in 
+                    //the case of > 2 equal heights
+                  }
+                  store_place[idx_place] = -99;
+                  
+                  ynames[idx_place] = d.name;
+                }
+              });
+
+            //Calculate y-coords. Uses ynames to find rank.
+            yval[0] = 0;
+            for (i = 1; i < yheight.length; i++) {
+              yval[i] = yval[i - 1] + yheight[i - 1] + delta;
+            }
+
+            //Plot TD region rects in descending order
+            d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
+              .each(function (d, idx) {
+                var idx_place = ynames.indexOf(d.name);
+          
+               d3.select(this).attr("transform", 
+                    "translate(" + (
+                           d.x = d.x
+                  ) + "," + (
+                           d.y = yval[idx_place]
+                    ) + ")");
+              });
+
+          } //end sortRegions()
 
           } //end makeSankey()
 
