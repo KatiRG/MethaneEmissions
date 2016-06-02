@@ -243,11 +243,11 @@
               //.on("click", highlight_node_links)
               .call(function () {
                 manualLayout();
-              });
-              // .call(d3.behavior.drag() //moves nodes with mouse drag
-              //   .origin(function(d) { return d; })  
-              //   .on("drag", dragmove)
-              //  );
+              })
+              .call(d3.behavior.drag() //moves nodes with mouse drag
+                .origin(function(d) { return d; })  
+                .on("drag", dragmove)
+               );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
@@ -267,10 +267,11 @@
             node.on("mouseover", function(d) {
               
               //Tooltip
-              if (d.name === "OtherNat") {
+              if (chart_div === "#chart_BU" && d.name === "OtherNat") {
                 div.transition()
                   .style("opacity", .9);
-                div.html(d.name + ": regions not affected<br>" )
+                div.html(d.name + ": these regions not affected<br>" 
+                         + "<br><b>" + "199 " + units + " global value</b>")
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY - 60) + "px");
               } else {
@@ -324,9 +325,10 @@
 
           // manually customize node position
           function manualLayout() {
+            //For sources only
             var displacement_dict = {
-              "Agriwast": 36, "OtherNat": 547, "BioBurBiof": 211, "Wetlands": 256,
-              "Fossil": 427
+              "Agriwast": 122, "OtherNat": 521, "BioBurBiof": 302, "Wetlands": 352,
+              "Fossil": 0
             };
             var link = d3.selectAll("path.link");
  
@@ -343,6 +345,52 @@
                
             sankey.relayout();
             link.attr("d", path);
+
+            // var delta = 10; //spacing between rects
+            // var yval; //new y coord of rect
+            // var orderedRegions = [
+            //   "Europe", "China", "India", "Temp_Eurasia_Japan", "contUSA",
+            //   "Cent_NAme", "Oceania", "Temp_SAme", "SE_Asia", "NAfr", "Russia",
+            //   "Trop_SAme", "SAfr", "Bor_NAme"
+            // ];
+            // var orderedRegions_dict = {
+            //   "Europe": 0, "China": 0, "India": 0, "Temp_Eurasia_Japan": 0, "contUSA": 0,
+            //   "Cent_NAme": 0, "Oceania": 0, "Temp_SAme": 0, "SE_Asia": 0, "NAfr": 0, 
+            //   "Russia": 0, "Trop_SAme": 0, "SAfr": 0, "Bor_NAme": 0
+            // };
+            // //Fill dict with rect heights
+            // d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
+            //   .filter(function(d) {
+            //     orderedRegions_dict[d.name] = d.dy; //rect height
+            //   });
+            // console.log("orderedRegions_dict: ", orderedRegions_dict)  
+
+            // d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
+            //   .attr("transform", function(d, idx) {
+            //     console.log("d: ", d)
+            //     var regionToMatch = orderedRegions[idx];
+            //     //var previousRegion = orderedRegions[idx];
+            //     console.log("regionToMatch: ", regionToMatch)
+  
+            //     if (idx === 0) yval = 0;
+                
+            //     if (d.name === regionToMatch) {
+            //       console.log("d.name: ", d.name)
+            //       console.log("yval: ", yval)
+            //       yval = yval + orderedRegions_dict[regionToMatch] + delta;
+            //       return "translate(" + 630 + "," + yval[idx] + ")";
+            //     }
+                
+
+            //     // if (idx === 0) yval[idx] = 0; //first rect is at (0,0)
+            //     // else {
+            //     //   yval[idx] = yval[idx - 1] + yheight[idx - 1] + delta;
+            //     // }
+            //     // return "translate(" + 0 + "," + yval[idx] + ")";
+            //   });
+
+
+
           }
 
           } //end makeSankey()
