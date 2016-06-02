@@ -415,32 +415,25 @@
                 yval_BU[i] = yval_BU[i - 1] + yheightBU_dict[ynames[i - 1]] + delta;
               }
               
-              //Plot TD region rects according to rank.
-              d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
-                .each(function(d, idx) {
-                  var idx_place = ynames.indexOf(d.name);
+              //Plot TD region rects according to rank
+              plotRects("#chart_TD", yval);
+              //Plot BU region rects according to TD rank
+              plotRects("#chart_BU", yval_BU);
 
-                  d3.select(this).attr("transform",
-                    "translate(" + (
-                      d.x = d.x
-                    ) + "," + (
-                      d.y = yval[idx_place]
-                    ) + ")");
-                });
+              function plotRects(chart_div, ycoords) {
+                d3.select(chart_div).selectAll(".node:not(." + "class-sources" + ")")
+                  .each(function(d, idx) {
+                    var idx_place = ynames.indexOf(d.name);
 
-              //Plot BU region rects according to TD rank.
-              d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
-                .each(function(d, idx) {
-                  var idx_place = ynames.indexOf(d.name);
+                    d3.select(this).attr("transform",
+                      "translate(" + (
+                        d.x = d.x
+                      ) + "," + (
+                        d.y = ycoords[idx_place]
+                      ) + ")");
+                  });
 
-                  d3.select(this).attr("transform",
-                    "translate(" + (
-                      d.x = d.x
-                    ) + "," + (
-                      d.y = yval_BU[idx_place]
-                    ) + ")");
-
-                });  
+              }
 
             } //end sortRegions()
 
