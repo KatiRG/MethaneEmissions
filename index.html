@@ -50,8 +50,7 @@
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO.json";
-        //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_noOtherNat.json";            
+          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_Notaffected_noZeros.json";      
         makeSankey(chart_div2, jsonFile2);
 
         function makeSankey(chart_div, jsonFile) {
@@ -122,7 +121,7 @@
             "India": "#dd1c77",
             "SE_Asia": "#ff80af",
             "Temp_Eurasia_Japan": "#e0e67f",
-            //"GLO": "#7558A6",
+            "Not affected": "#563DBA",
             //sources
             "Agriwast": "#886666",
             "BioBurBiof": "#b0df65",
@@ -186,10 +185,7 @@
               })
               .style("stroke", function(d) {
                 if (chart_div === "#chart_TD") return colour_dict[d.source.name];
-                else { //no values for OtherNat in BU approach                  
-                  if (d.source.name === "OtherNat") return "#151515"; //dark grey
-                  else return colour_dict[d.target.name];
-                }
+                else return colour_dict[d.target.name];
               })
               .sort(function(a, b) {
                 return b.dy - a.dy;
@@ -205,20 +201,13 @@
                 d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
 
                 //Tooltip
-                if (d.source.name === "OtherNat") {
-                  div.transition()
-                    .style("opacity", .9);
-                  div.html(d.source.name + ": " + d.target.name + " not affected<br>")
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 60) + "px");
-                } else {
-                  div.transition()
-                    .style("opacity", .9);
-                  div.html(d.source.name + ": " + d.target.name +
-                      "<br><b>" + format(d.value) + " " + units + "</b>")
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY) + "px");
-                }
+                div.transition()
+                   .style("opacity", .9);
+                div.html(d.source.name + ": " + d.target.name +
+                         "<br><b>" + format(d.value) + " " + units + "</b>")
+                   .style("left", (d3.event.pageX) + "px")
+                   .style("top", (d3.event.pageY) + "px");
+  
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -259,30 +248,19 @@
               })
               .attr("width", sankey.nodeWidth())
               .style("fill", function(d, idx) {
-                if (chart_div === "#chart_BU" && d.name === "OtherNat") return "#696969";
-                else return colour_dict[d.name];
+                return colour_dict[d.name];
               })
               .style("stroke-width", "2px")
               .style("stroke", "#555");
 
             // add the node tooltip
             node.on("mouseover", function(d) {
-
                 //Tooltip
-                if (chart_div === "#chart_BU" && d.name === "OtherNat") {
-                  div.transition()
-                    .style("opacity", .9);
-                  div.html(d.name + ": these regions not affected<br>" +
-                      "<br><b>" + "199 " + units + " global value</b>")
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 60) + "px");
-                } else {
-                  div.transition()
-                    .style("opacity", .9);
-                  div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 60) + "px");
-                }
+                div.transition()
+                   .style("opacity", .9);
+                div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
+                   .style("left", (d3.event.pageX) + "px")
+                   .style("top", (d3.event.pageY - 60) + "px");                
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
@@ -329,10 +307,10 @@
             function manualLayout() {
               //For sources only
               var displacement_dict = {
-                "Agriwast": 122,
-                "OtherNat": 521,
-                "BioBurBiof": 302,
-                "Wetlands": 352,
+                "Agriwast": 103,
+                "OtherNat": 460,
+                "BioBurBiof": 276,
+                "Wetlands": 311,
                 "Fossil": 0
               };
               var link = d3.selectAll("path.link");
@@ -396,25 +374,33 @@
                     ynames[idx_place] = d.name; //rect names ranked by decreasing height
                   
                 });
+              
+              //Add "Not affected" to ynames for BU chart only!!!
+              ynames[ynames.length] = "Not affected";
 
               //Store heights of BU rects in dict
               var yheightBU_dict = {
                 "Europe": 0, "China": 0, "India": 0, "Temp_Eurasia_Japan": 0, "contUSA": 0,
                 "Cent_NAme": 0, "Oceania": 0, "Temp_SAme": 0, "SE_Asia": 0, "NAfr": 0, 
-                "Russia": 0, "Trop_SAme": 0, "SAfr": 0, "Bor_NAme": 0
+                "Russia": 0, "Trop_SAme": 0, "SAfr": 0, "Bor_NAme": 0, "Not affected": 0
               };
               d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
                 .each(function (d, idx) {
                   yheightBU_dict[d.name] = d.dy;
-                }); 
+                });
 
-              //Calculate y-coords of both TD and BU rects. Uses ynames to find rank.              
-              yval[0] = 0, yval_BU[0] = 0;
+              //Calculate new y-coords of TD rects.
+              yval[0] = 0;
               for (i = 1; i < yheight.length; i++) {
-                yval[i] = yval[i - 1] + yheight[i - 1] + delta;                
+                yval[i] = yval[i - 1] + yheight[i - 1] + delta;
+              }
+
+              //Calculate new y-coords of TU rects based on order of ynames.
+              yval_BU[0] = 0
+              for (i = 1; i < ynames.length; i++) {
                 yval_BU[i] = yval_BU[i - 1] + yheightBU_dict[ynames[i - 1]] + delta;
               }
-              
+
               //Plot TD region rects according to rank
               plotRects("#chart_TD", yval);
               //Plot BU region rects according to TD rank
