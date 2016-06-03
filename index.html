@@ -350,7 +350,7 @@
 
               //Sort region rects of TD chart in descending order. Use same order for BU regions.
               //Call only once.
-              if (chart_div === "#chart_BU") sortRegions();
+              if (chart_div === "#chart_BU") orderRegions();
 
               sankey.relayout();
               link.attr("d", path);
@@ -358,44 +358,15 @@
             }
 
             //Sorts region rects of TD chart and uses this order for BU chart
-            function sortRegions() {
-              var idx = 0;
-              var yheight = []; //array to store sorted rect height array
-              var yheight_BU = []; //stores heights of rects in BU chart
-              var yval = [], yval_BU = []; //array to store calculated ycoords
-              var ynames = []; //array to store sorted names
-              var store_place = []; //placeholder
+            function orderRegions() {
+              var yval_BU = []; //new y-coord for BU region rects              
+              var ynames = []; //array to store sorted names             
               delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
 
-              // Sort the rect heights in descending order and store in array      
-              d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
-                .each(function(d, idx) {
-              
-                  yheight.push(d.dy);
-                  yheight.sort(sortDescending);
-                  return yheight;
-
-                  function sortDescending(a, b) {
-                    return b - a; //use a - b to sort in increasing order
-                  }
-                });
-
-              //Find names corresponding to yheight
-              //Used in last selection loop to find rank of rects
-              d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
-                .each(function(d, idx) {
-
-                    var idx_place = yheight.indexOf(d.dy); //order for sorted names
-                    //handle case when yheight contains two equal numbers
-                    if (store_place[idx_place] === -99) {
-                      idx_place = idx_place + 1; //need to find next available place in 
-                      //the case of > 2 equal heights
-                    }
-                    store_place[idx_place] = -99;
-
-                    ynames[idx_place] = d.name; //rect names ranked by decreasing height
-                  
-                });
+              //Region order in TD chart
+              ynames = ["Europe", "China", "India", "Temp_Eurasia_Japan", "contUSA",
+                         "Cent_NAme", "Oceania", "Temp_SAme", "SE_Asia", "NAfr", 
+                         "Russia", "Trop_SAme", "SAfr", "Bor_NAme"]
 
               //Store heights of BU rects in dict
               var yheightBU_dict = {
@@ -406,18 +377,15 @@
               d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
                 .each(function (d, idx) {
                   yheightBU_dict[d.name] = d.dy;
-                }); 
+                });               
 
               //Calculate y-coords of both TD and BU rects. Uses ynames to find rank.              
-              yval[0] = 0, yval_BU[0] = 0;
-              for (i = 1; i < yheight.length; i++) {
-                yval[i] = yval[i - 1] + yheight[i - 1] + delta;                
-                yval_BU[i] = yval_BU[i - 1] + yheightBU_dict[ynames[i - 1]] + delta;
+              yval_BU[0] = 0;
+              for (i = 1; i < ynames.length; i++) {
+                yval_BU[i] = yval_BU[i - 1] + yheightBU_dict[ynames[i - 1]] + delta;                
               }
               
-              //Plot TD region rects according to rank
-              plotRects("#chart_TD", yval);
-              //Plot BU region rects according to TD rank
+              //Plot BU region rects according to TD order
               plotRects("#chart_BU", yval_BU);
 
               function plotRects(chart_div, ycoords) {
@@ -435,7 +403,7 @@
 
               }
 
-            } //end sortRegions()
+            } //end orderRegions()
 
           } //end makeSankey()
 
