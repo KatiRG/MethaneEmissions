@@ -50,8 +50,32 @@
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_Notaffected_noZeros.json";      
+          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_Notaffected_noZeros.json";
         makeSankey(chart_div2, jsonFile2);
+
+        //Load min/max data
+        d3.tsv("data/statsBU.tsv", function(error, stats) {
+          if (error) throw error;
+
+          console.log("stats: ", stats)
+
+          // // Create an array to store unit flux values, indexed by MARCATS_ID
+          // var unit_dict = new Array();
+          // unit_dict[0] = -999; //there is no MARCAT_ID = 0
+
+           
+          stats.forEach(function(d) {
+            console.log("d: ", d)
+            // d.abs_anthro = +d.abs_anthro; //set to num
+            // d.MARCATS_ID = +d.MARCATS_ID;
+            // minflux = d.abs_anthro < minflux ? d.abs_anthro : minflux;
+            // maxflux = d.abs_anthro > maxflux ? d.abs_anthro : maxflux;
+
+            // unit_dict[d.MARCATS_ID] = d.abs_anthro;
+
+          });
+
+        }) //end d3.tsv
 
         function makeSankey(chart_div, jsonFile) {
           var margin = {
