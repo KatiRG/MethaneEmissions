@@ -1,0 +1,17 @@
+2003-2012 CH4  budget per category - ALL studies
+proc Bor_NAme contUSA Cent_NAme Trop_SAme Temp_SAme NAfr SAfr Russia Oceania Europe China India SE_Asia Temp_Eurasia_Japan GLO
+  Wetlands mean  13   8   2  47   6  11  21  13   2   2   4   6  31   2  69
+   Wetlands min   7   6   2  30   4   8  18  10   1   1   3   4   8   1  59
+   Wetlands max  21   9   2  61   7  14  23  15   2   2   7   8  41   2  75
+  OtherNat mean   2   2   1   7   1   6   5   2   2   2   4   2   6   3  51
+   OtherNat min   1   1   1   5   1   3   4   1   1   1   1   1   2   1  21
+   OtherNat max   2   4   1   8   2   7  11   3   2   1   1   1   9   2  47
+  Agriwast mean   3  17   5  21   6  12   7   5   4  16  30  25  25  20  96
+   Agriwast min   2  15   6  19   5  12   7   3   3  13  16  16  17  16  75
+   Agriwast max   3  23   7  24   8  14   8   7   5  19  38  28  32  24   7
+    Fossil mean   2  11   2   5   1   7   4  18   2   7  23   3   7  21  11
+     Fossil min   1   9   1   1   1   5   2  13   0   6   9   3   5  14  77
+     Fossil max   2  15   3   8   1   8   5  20   2   9  31   4   8  27  33
+BioBurBiof mean   1   0   1   6   0   4   6   1   1   1   3   2   6   1  32
+ BioBurBiof min   1   0   0   3   0   4   4   1   0   0   2   2   3   1  29
+ BioBurBiof max   1   1   1   7   1   4   9   2   1   1   4   2   6   1  44

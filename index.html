@@ -45,12 +45,13 @@
 
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
-            jsonFile1 = "Sankey_TD_2003-2012_25MAy2016_means.json";
+          jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_means_noGLO.json";
         makeSankey(chart_div1, jsonFile1);
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-            jsonFile2 = "Sankey_BU_2003-2012_25MAy2016.json";
+          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO.json";
+        //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_noOtherNat.json";            
         makeSankey(chart_div2, jsonFile2);
 
         function makeSankey(chart_div, jsonFile) {
@@ -61,7 +62,7 @@
             left: 10
           };
 
-          var width = 750 - margin.left - margin.right,
+          var width = 670 - margin.left - margin.right,
             height = 700 - margin.top - margin.bottom;
 
           var formatNumber = d3.format(".2f"),
@@ -82,7 +83,7 @@
           //Position BU Sankey beside TD Sankey
           $('#chart_BU svg').css({
             top: 60,
-            left: 790,
+            left: 700,
             position: 'absolute'
           });
 
@@ -96,8 +97,7 @@
 
           var col_xcoord = []; //x-coords of Sankey cols
 
-          //var units = "Tg C yr <sup>-1</sup>";
-          var units = "[units]";
+          var units = "Tg CH4 yr <sup>-1</sup>";
 
           Coal_color = "#3B3131";
           Oil_color = "#886666";
@@ -122,9 +122,9 @@
             "India": "#dd1c77",
             "SE_Asia": "#ff80af",
             "Temp_Eurasia_Japan": "#e0e67f",
-            "GLO": "#7558A6",
+            //"GLO": "#7558A6",
             //sources
-            "Agriwast": "#886666", 
+            "Agriwast": "#886666",
             "BioBurBiof": "#b0df65",
             "Fossil": "#3b3131",
             "OtherNat": "#AEC7E8",
@@ -186,27 +186,39 @@
               })
               .style("stroke", function(d) {
                 if (chart_div === "#chart_TD") return colour_dict[d.source.name];
-                else return colour_dict[d.target.name];
+                else { //no values for OtherNat in BU approach                  
+                  if (d.source.name === "OtherNat") return "#151515"; //dark grey
+                  else return colour_dict[d.target.name];
+                }
               })
               .sort(function(a, b) {
                 return b.dy - a.dy;
               });
-              // .call(function () {
-              //   DO NOT PUT CALL IN link, PUT IN node (see below)
-              //   manualLayout();
-              // });
+            // .call(function () {
+            //   DO NOT PUT CALL IN link, PUT IN node (see below)
+            //   manualLayout();
+            // });
 
             // add the link tooltip
             link.on("mouseover", function(d) {
-              //Reduce opacity of all but link that is moused over
-              d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
+                //Reduce opacity of all but link that is moused over
+                d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
 
-                div.transition()
-                  .style("opacity", .9);
-                div.html(d.source.name + ": " + d.target.name +
-                    "<br><b>" + format(d.value) + " " + units + "</b>")
-                  .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY) + "px");
+                //Tooltip
+                if (d.source.name === "OtherNat") {
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(d.source.name + ": " + d.target.name + " not affected<br>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 60) + "px");
+                } else {
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(d.source.name + ": " + d.target.name +
+                      "<br><b>" + format(d.value) + " " + units + "</b>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY) + "px");
+                }
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -220,22 +232,24 @@
               .data(graph.nodes)
               .enter().append("g")
               //.attr("class", "node")
-              .attr("class", function (d) {
+              .attr("class", function(d) {
                 if (categories.indexOf(d.name) != -1) return "node class-sources";
                 else return "node";
               })
               .attr("transform", function(d) {
                 col_xcoord.push(d.x); //x-coord of each Sankey col
                 return "translate(" + d.x + "," + d.y + ")";
-              })             
+              })
               //.on("click", highlight_node_links)
-              .call(function () {
+              .call(function() {
                 manualLayout();
               });
               // .call(d3.behavior.drag() //moves nodes with mouse drag
-              //   .origin(function(d) { return d; })  
+              //   .origin(function(d) {
+              //     return d;
+              //   })
               //   .on("drag", dragmove)
-              //  );
+              // );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
@@ -245,25 +259,33 @@
               })
               .attr("width", sankey.nodeWidth())
               .style("fill", function(d, idx) {
-                return colour_dict[d.name];
+                if (chart_div === "#chart_BU" && d.name === "OtherNat") return "#696969";
+                else return colour_dict[d.name];
               })
               .style("stroke-width", "2px")
               .style("stroke", "#555");
 
             // add the node tooltip
             node.on("mouseover", function(d) {
-              // console.log("d: ", d)
-              // console.log("this: ", this)
-              //d3.selectAll(".node")                          
 
-                div.transition()
-                  .style("opacity", .9);
-                div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
-                  .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 60) + "px");
+                //Tooltip
+                if (chart_div === "#chart_BU" && d.name === "OtherNat") {
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(d.name + ": these regions not affected<br>" +
+                      "<br><b>" + "199 " + units + " global value</b>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 60) + "px");
+                } else {
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 60) + "px");
+                }
               })
               .on("mouseenter", highlight_node_links)
-              .on("mouseout", function(d) {                
+              .on("mouseout", function(d) {
                 d3.selectAll(".clicked").classed("clicked", false);
                 d3.selectAll(".link").style("stroke-opacity", 0.5);
 
@@ -291,40 +313,97 @@
 
             // the function for moving the nodes
             function dragmove(d) {
-              d3.select(this).attr("transform", 
-                  "translate(" + (
-                             d.x = d.x
-                    ) + "," + (
-                             d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
-                      ) + ")");
-              
+              d3.select(this).attr("transform",
+                "translate(" + (
+                  d.x = d.x
+                ) + "," + (
+                  d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+                ) + ")");
+
               //move the attached links
               sankey.relayout();
               link.attr("d", path);
             }
 
-          // manually customize node position
-          function manualLayout() {
-            var displacement_dict = {
-              "Agriwast": 36, "OtherNat": 210, "BioBurBiof": 296, "Wetlands": 356,
-              "Fossil": 507
-            };
-            var link = d3.selectAll("path.link");
- 
-            d3.selectAll("g.node.class-sources")  //here's how you get all the nodes
-              .each(function (d, idx) {
-               
-               d3.select(this).attr("transform", 
+            // manually customize node position
+            function manualLayout() {
+              //For sources only
+              var displacement_dict = {
+                "Agriwast": 122,
+                "OtherNat": 521,
+                "BioBurBiof": 302,
+                "Wetlands": 352,
+                "Fossil": 0
+              };
+              var link = d3.selectAll("path.link");
+
+              d3.selectAll("g.node.class-sources") //here's how you get all the nodes
+                .each(function(d, idx) {
+
+                  d3.select(this).attr("transform",
                     "translate(" + (
-                           d.x = d.x
-                  ) + "," + (
-                           d.y = displacement_dict[d.name]
+                      d.x = d.x
+                    ) + "," + (
+                      d.y = displacement_dict[d.name]
                     ) + ")");
-            });
-               
-            sankey.relayout();
-            link.attr("d", path);
-          }
+                });
+
+              //Sort region rects of TD chart in descending order. Use same order for BU regions.
+              //Call only once.
+              if (chart_div === "#chart_BU") orderRegions();
+
+              sankey.relayout();
+              link.attr("d", path);
+
+            }
+
+            //Sorts region rects of TD chart and uses this order for BU chart
+            function orderRegions() {
+              var yval_BU = []; //new y-coord for BU region rects              
+              var ynames = []; //array to store sorted names             
+              delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
+
+              //Region order in TD chart
+              ynames = ["Europe", "China", "India", "Temp_Eurasia_Japan", "contUSA",
+                         "Cent_NAme", "Oceania", "Temp_SAme", "SE_Asia", "NAfr", 
+                         "Russia", "Trop_SAme", "SAfr", "Bor_NAme"]
+
+              //Store heights of BU rects in dict
+              var yheightBU_dict = {
+                "Europe": 0, "China": 0, "India": 0, "Temp_Eurasia_Japan": 0, "contUSA": 0,
+                "Cent_NAme": 0, "Oceania": 0, "Temp_SAme": 0, "SE_Asia": 0, "NAfr": 0, 
+                "Russia": 0, "Trop_SAme": 0, "SAfr": 0, "Bor_NAme": 0
+              };
+              d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
+                .each(function (d, idx) {
+                  yheightBU_dict[d.name] = d.dy;
+                });               
+
+              //Calculate y-coords of both TD and BU rects. Uses ynames to find rank.              
+              yval_BU[0] = 0;
+              for (i = 1; i < ynames.length; i++) {
+                yval_BU[i] = yval_BU[i - 1] + yheightBU_dict[ynames[i - 1]] + delta;                
+              }
+              
+              //Plot BU region rects according to TD order
+              plotRects("#chart_BU", yval_BU);
+
+              function plotRects(chart_div, ycoords) {
+                d3.select(chart_div).selectAll(".node:not(." + "class-sources" + ")")
+                  .each(function(d, idx) {
+                    var idx_place = ynames.indexOf(d.name);
+
+                    d3.select(this).attr("transform",
+                      "translate(" + (
+                        d.x = d.x
+                      ) + "," + (
+                        d.y = ycoords[idx_place]
+                      ) + ")");
+                  });
+
+              }
+
+            } //end orderRegions()
 
           } //end makeSankey()
 
@@ -341,7 +420,7 @@
           }
 
           //Modified from http://bl.ocks.org/git-ashish/8959771
-          function highlight_node_links(node, i) {            
+          function highlight_node_links(node, i) {
 
             var remainingNodes = [],
               nextNodes = [];
@@ -385,7 +464,7 @@
             //Reduce opacity of links not part of highlight group
             d3.selectAll(".link:not(." + "clicked" + ")")
               .style("stroke-opacity", stroke_opacity_clicked);
-            
+
           }
 
         } // end fn make(graph)
