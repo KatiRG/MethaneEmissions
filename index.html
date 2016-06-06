@@ -53,7 +53,7 @@
           jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_Notaffected_noZeros.json";
         makeSankey(chart_div2, jsonFile2);
 
-        var BUmin;
+        var minStat, maxStat;
 
         // //Load min/max data
         // d3.tsv("data/junk.tsv", function(error, stats) {
@@ -160,21 +160,20 @@
           } else {
             minFile = "data/Sankey_TD_2003-2012_25MAy2016_min.json";
             maxFile = "data/Sankey_TD_2003-2012_25MAy2016_max.json";
-
           }
-                        
-
-          console.log("minFile: ", minFile)
 
           // load the data
-        d3.json(minFile, function(error, BUmin) {  
+      d3.json(maxFile, function(error, maxStat) {    
+        d3.json(minFile, function(error, minStat) {
           d3.json(jsonFile, function(error, graph) {
-            console.log("BUmin: ", BUmin)
-            make(graph, BUmin);
+            console.log("minStat: ", minStat)
+            console.log("maxStat: ", maxStat)
+            make(graph, minStat, maxStat);
           });
-        });  
+        });
+      });  
 
-          function make(graph, BUmin) {
+          function make(graph, minStat, maxStat) {
             // Display info text for Sankey diagram
 
             d3.select("#infotext").html("Le bilan des sources de méthane est vu par deux approches, l'approche Bottom-up (BU) (droit) et l'approche Top-Down TD (gauche). Les sources sont divisées en 5 catégories. Les valeurs réprésentent les estimations des means.")
@@ -234,18 +233,23 @@
             // add the link tooltip
             link.on("mouseover", function(d) {
               console.log("d link mouseover: ", d)
-              console.log("BUmin in link mouseover: ", BUmin.links)
-              console.log("BUmin.length: ", Object.keys(BUmin.links).length)
+              console.log("minStat in link mouseover: ", minStat.links)
+              console.log("minStat.length: ", Object.keys(minStat.links).length)
+              console.log("maxStat.length: ", Object.keys(maxStat.links).length)
 
               var minValue, maxValue;
 
-              //find min/max stats in BUmin
-              for (i=0; i<Object.keys(BUmin.links).length; i++) {
-                console.log("BUmin.links[i]: ", BUmin.links[i].target)
-                console.log("d.target.name: ", d.target.name)
-                if (BUmin.links[i].target == d.target.name && BUmin.links[i].source == d.source.name) {
-                  console.log("target: ", BUmin.links[i].value)
-                  minValue = BUmin.links[i].value;
+              //find min/max stats in minStat
+              for (i=0; i<Object.keys(minStat.links).length; i++) {
+                //console.log("minStat.links[i]: ", minStat.links[i].target)
+                //console.log("d.target.name: ", d.target.name)
+                if (minStat.links[i].target == d.target.name && minStat.links[i].source == d.source.name) {
+                  console.log("minStat target: ", minStat.links[i].target)
+                  console.log("d.target.name: ", d.target.name)
+                  console.log("minStat source: ", minStat.links[i].source)
+                  console.log("d.source.name: ", d.source.name)
+                  console.log("minStat value: ", minStat.links[i].value)
+                  minValue = minStat.links[i].value;
                 }
               }
 
