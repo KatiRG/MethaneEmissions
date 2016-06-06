@@ -152,8 +152,22 @@
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
 
+          var minFile, maxFile;
+          console.log("chart_div here: ", chart_div)
+          if (chart_div === "#chart_BU") {
+            minFile = "data/Sankey_BU_2003-2012_25MAy2016_min.json";
+            maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max.json";
+          } else {
+            minFile = "data/Sankey_TD_2003-2012_25MAy2016_min.json";
+            maxFile = "data/Sankey_TD_2003-2012_25MAy2016_max.json";
+
+          }
+                        
+
+          console.log("minFile: ", minFile)
+
           // load the data
-        d3.json("data/Sankey_BU_2003-2012_25MAy2016_min.json", function(error, BUmin) {  
+        d3.json(minFile, function(error, BUmin) {  
           d3.json(jsonFile, function(error, graph) {
             console.log("BUmin: ", BUmin)
             make(graph, BUmin);
