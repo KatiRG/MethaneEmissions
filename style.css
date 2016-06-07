@@ -79,3 +79,13 @@
     top: 75px;
     left: 16px;
   }
+
+  table, th, td {
+    border: none;
+    border-collapse: collapse;
+    width: 1*, 1*, 2*;
+  }
+  th, td {
+    padding: 2px;
+    text-align: right;
+  }

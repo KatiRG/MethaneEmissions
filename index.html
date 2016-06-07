@@ -32,7 +32,7 @@
     <!-- Begin page content -->
     <div class="container">
 
-      <div id="infotext" style="width: 700px;"></div>
+      <div id="infotext" style="width: 700px;"></div>        
 
       <p id="chart_TD"></p>
       <p id="chart_BU"></p>
@@ -66,7 +66,7 @@
           var width = 670 - margin.left - margin.right,
             height = 700 - margin.top - margin.bottom;
 
-          var formatNumber = d3.format(".2f"),
+          var formatNumber = d3.format(".0f"), //d3.format(".2f"),
             format = function(d) {
               return formatNumber(d);
             },
@@ -223,12 +223,63 @@
                 //Tooltip
                 div.transition()
                   .style("opacity", .9);
-                div.html(d.source.name + ": " + d.target.name + "<br>" +
-                    "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
-                    "<br> min:.... " + format(minValue) + " " + units +
-                    "<br> max:.... " + format(maxValue) + " " + units)
+                div.html(
+                  // d.source.name + ": " + d.target.name + "<br>" +
+                  //   "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
+                  //   "<br> min:.... " + format(minValue) + " " + units +
+                  //   "<br> max:.... " + format(maxValue) + " " + units
+                  d.source.name + ": " + d.target.name + "<br><br>" +
+                  "<table>" +
+                    // "<tr><td colspan='2'>" + d.source.name + ": " + d.target.name + "</td>" +
+                    // "</tr>" +
+
+                    "<tr>" +                     
+                      "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" + format(maxValue) + "]" + "</td>" +
+                      "<td>" + " " + units + "</td>" +
+                    "</tr>" +
+
+                    // "<tr>" +
+                    //   "<td> mean: </td>" +
+                    //   "<td>" + " " + format(d.value) + " " + "</td>" +
+                    //   "<td>" + " " + units + "</td>" +
+                    // "</tr>" +
+
+                    // "<tr>" +
+                    //   "<td>min: </td>" +
+                    //   "<td>" + " " + format(minValue) + " " + "</td>" +
+                    //   "<td>" + " " + units + "</td>" +
+                    // "</tr>" +
+
+                    // "<tr>" +
+                    //   "<td>max: </td>" +
+                    //   "<td>" + " " + format(maxValue) + " " + "</td>" +
+                    //   "<td>" + " " + units + "</td>" +
+                    // "</tr>" +
+
+                  "</table>"
+                  )
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY) + "px");
+
+
+              // <table>
+              //   <tr>
+              //     <td colspan="2">Trop: Wetlands</td>
+              //   </tr>
+              //   <tr>
+              //     <td><b>mean:</b></td>
+              //     <td><b>32 CH4</b></td>
+              //   </tr>
+              //   <tr>
+              //     <td>min:</td>
+              //     <td>25 CH4</td>
+              //   </tr>
+              //   <tr>
+              //     <td>max:</td>
+              //     <td>1 CH4</td>
+              //   </tr>
+              // </table> 
+
 
               })
               .on("mouseout", function(d) {
