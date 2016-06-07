@@ -40,7 +40,6 @@
 {"source": "BioBurBiof", "target": "contUSA", "value": "2.00"},
 {"source": "BioBurBiof", "target": "Cent_NAme", "value": "1.00"},
 {"source": "BioBurBiof", "target": "Trop_SAme", "value": "6.00"},
-{"source": "BioBurBiof", "target": "Temp_SAme", "value": "1.00"},
 {"source": "BioBurBiof", "target": "NAfr", "value": "5.00"},
 {"source": "BioBurBiof", "target": "SAfr", "value": "10.00"},
 {"source": "BioBurBiof", "target": "Russia", "value": "4.00"},

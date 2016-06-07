@@ -45,12 +45,12 @@
 
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
-          jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_means_noGLO.json";
+          jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_mean_noZeros.json";
         makeSankey(chart_div1, jsonFile1);
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_noGLO_Notaffected_noZeros.json";
+          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";
         makeSankey(chart_div2, jsonFile2);
 
         var minStat, maxStat;
@@ -232,24 +232,16 @@
 
             // add the link tooltip
             link.on("mouseover", function(d) {
-              console.log("d link mouseover: ", d)
-              console.log("minStat in link mouseover: ", minStat.links)
-              console.log("minStat.length: ", Object.keys(minStat.links).length)
-              console.log("maxStat.length: ", Object.keys(maxStat.links).length)
 
               var minValue, maxValue;
 
               //find min/max stats in minStat
               for (i=0; i<Object.keys(minStat.links).length; i++) {
-                //console.log("minStat.links[i]: ", minStat.links[i].target)
-                //console.log("d.target.name: ", d.target.name)
                 if (minStat.links[i].target == d.target.name && minStat.links[i].source == d.source.name) {
-                  console.log("minStat target: ", minStat.links[i].target)
-                  console.log("d.target.name: ", d.target.name)
-                  console.log("minStat source: ", minStat.links[i].source)
-                  console.log("d.source.name: ", d.source.name)
-                  console.log("minStat value: ", minStat.links[i].value)
                   minValue = minStat.links[i].value;
+                }
+                if (maxStat.links[i].target == d.target.name && maxStat.links[i].source == d.source.name) {
+                  maxValue = maxStat.links[i].value;
                 }
               }
 
@@ -261,7 +253,8 @@
                    .style("opacity", .9);
                 div.html(d.source.name + ": " + d.target.name + "<br>" +
                          "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
-                         "<br> min:.... " + format(minValue) + " " + units )
+                         "<br> min:.... " + format(minValue) + " " + units +
+                         "<br> max:.... " + format(maxValue) + " " + units )
                    .style("left", (d3.event.pageX) + "px")
                    .style("top", (d3.event.pageY) + "px");
   
