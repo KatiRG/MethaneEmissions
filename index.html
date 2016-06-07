@@ -55,23 +55,6 @@
 
         var minStat, maxStat;
 
-        // //Load min/max data
-        // d3.tsv("data/junk.tsv", function(error, stats) {
-        //   if (error) throw error;
-
-        //   console.log("stats: ", stats)
-
-        //   // // Create an array to store unit flux values, indexed by MARCATS_ID
-        //   // var unit_dict = new Array();
-        //   // unit_dict[0] = -999; //there is no MARCAT_ID = 0
-
-           
-        //   stats.forEach(function(d) {
-        //     console.log("d: ", d)
-
-        //   });
-        // }) //end d3.tsv
-
         function makeSankey(chart_div, jsonFile) {
           var margin = {
             top: 100,
@@ -153,7 +136,7 @@
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
 
           var minFile, maxFile;
-          console.log("chart_div here: ", chart_div)
+
           if (chart_div === "#chart_BU") {
             minFile = "data/Sankey_BU_2003-2012_25MAy2016_min.json";
             maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max.json";
@@ -163,15 +146,13 @@
           }
 
           // load the data
-      d3.json(maxFile, function(error, maxStat) {    
-        d3.json(minFile, function(error, minStat) {
-          d3.json(jsonFile, function(error, graph) {
-            console.log("minStat: ", minStat)
-            console.log("maxStat: ", maxStat)
-            make(graph, minStat, maxStat);
+          d3.json(maxFile, function(error, maxStat) {
+            d3.json(minFile, function(error, minStat) {
+              d3.json(jsonFile, function(error, graph) {
+                make(graph, minStat, maxStat);
+              });
+            });
           });
-        });
-      });  
 
           function make(graph, minStat, maxStat) {
             // Display info text for Sankey diagram
@@ -233,31 +214,22 @@
             // add the link tooltip
             link.on("mouseover", function(d) {
 
-              var minValue, maxValue;
-
-              //find min/max stats in minStat
-              for (i=0; i<Object.keys(minStat.links).length; i++) {
-                if (minStat.links[i].target == d.target.name && minStat.links[i].source == d.source.name) {
-                  minValue = minStat.links[i].value;
-                }
-                if (maxStat.links[i].target == d.target.name && maxStat.links[i].source == d.source.name) {
-                  maxValue = maxStat.links[i].value;
-                }
-              }
+                var minValue = getStat(minStat, d),
+                  maxValue = getStat(maxStat, d);
 
                 //Reduce opacity of all but link that is moused over
                 d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
 
                 //Tooltip
                 div.transition()
-                   .style("opacity", .9);
+                  .style("opacity", .9);
                 div.html(d.source.name + ": " + d.target.name + "<br>" +
-                         "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
-                         "<br> min:.... " + format(minValue) + " " + units +
-                         "<br> max:.... " + format(maxValue) + " " + units )
-                   .style("left", (d3.event.pageX) + "px")
-                   .style("top", (d3.event.pageY) + "px");
-  
+                    "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
+                    "<br> min:.... " + format(minValue) + " " + units +
+                    "<br> max:.... " + format(maxValue) + " " + units)
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY) + "px");
+
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -265,6 +237,14 @@
                 div.transition()
                   .style("opacity", 0);
               });
+
+            function getStat(statObj, d) {
+              for (i = 0; i < Object.keys(statObj.links).length; i++) {
+                if (statObj.links[i].target == d.target.name && statObj.links[i].source == d.source.name) {
+                  return statObj.links[i].value;
+                }
+              }
+            }
 
             // add in the nodes
             var node = svg.append("g").selectAll(".node")
@@ -283,12 +263,12 @@
               .call(function() {
                 manualLayout();
               });
-              // .call(d3.behavior.drag() //moves nodes with mouse drag
-              //   .origin(function(d) {
-              //     return d;
-              //   })
-              //   .on("drag", dragmove)
-              // );
+            // .call(d3.behavior.drag() //moves nodes with mouse drag
+            //   .origin(function(d) {
+            //     return d;
+            //   })
+            //   .on("drag", dragmove)
+            // );
             col_xcoord = uniques(col_xcoord);
 
             // add the rectangles for the nodes
@@ -307,10 +287,10 @@
             node.on("mouseover", function(d) {
                 //Tooltip
                 div.transition()
-                   .style("opacity", .9);
+                  .style("opacity", .9);
                 div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
-                   .style("left", (d3.event.pageX) + "px")
-                   .style("top", (d3.event.pageY - 60) + "px");                
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - 60) + "px");
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
@@ -390,7 +370,8 @@
               var idx = 0;
               var yheight = []; //array to store sorted rect height array
               var yheight_BU = []; //stores heights of rects in BU chart
-              var yval = [], yval_BU = []; //array to store calculated ycoords
+              var yval = [],
+                yval_BU = []; //array to store calculated ycoords
               var ynames = []; //array to store sorted names
               var store_place = []; //placeholder
               delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
@@ -398,7 +379,7 @@
               // Sort the rect heights in descending order and store in array      
               d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
                 .each(function(d, idx) {
-              
+
                   yheight.push(d.dy);
                   yheight.sort(sortDescending);
                   return yheight;
@@ -413,29 +394,41 @@
               d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
                 .each(function(d, idx) {
 
-                    var idx_place = yheight.indexOf(d.dy); //order for sorted names
-                    //handle case when yheight contains two equal numbers
-                    if (store_place[idx_place] === -99) {
-                      idx_place = idx_place + 1; //need to find next available place in 
-                      //the case of > 2 equal heights
-                    }
-                    store_place[idx_place] = -99;
+                  var idx_place = yheight.indexOf(d.dy); //order for sorted names
+                  //handle case when yheight contains two equal numbers
+                  if (store_place[idx_place] === -99) {
+                    idx_place = idx_place + 1; //need to find next available place in 
+                    //the case of > 2 equal heights
+                  }
+                  store_place[idx_place] = -99;
 
-                    ynames[idx_place] = d.name; //rect names ranked by decreasing height
-                  
+                  ynames[idx_place] = d.name; //rect names ranked by decreasing height
+
                 });
-              
+
               //Add "Not affected" to ynames for BU chart only!!!
               ynames[ynames.length] = "Not affected";
 
               //Store heights of BU rects in dict
               var yheightBU_dict = {
-                "Europe": 0, "China": 0, "India": 0, "Temp_Eurasia_Japan": 0, "contUSA": 0,
-                "Cent_NAme": 0, "Oceania": 0, "Temp_SAme": 0, "SE_Asia": 0, "NAfr": 0, 
-                "Russia": 0, "Trop_SAme": 0, "SAfr": 0, "Bor_NAme": 0, "Not affected": 0
+                "Europe": 0,
+                "China": 0,
+                "India": 0,
+                "Temp_Eurasia_Japan": 0,
+                "contUSA": 0,
+                "Cent_NAme": 0,
+                "Oceania": 0,
+                "Temp_SAme": 0,
+                "SE_Asia": 0,
+                "NAfr": 0,
+                "Russia": 0,
+                "Trop_SAme": 0,
+                "SAfr": 0,
+                "Bor_NAme": 0,
+                "Not affected": 0
               };
               d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
-                .each(function (d, idx) {
+                .each(function(d, idx) {
                   yheightBU_dict[d.name] = d.dy;
                 });
 
