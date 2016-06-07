@@ -132,6 +132,31 @@
             "Wetlands": "#980043"
           };
 
+          var name_dict = {
+            //regions
+            "Bor_NAme": "Boreal North America",
+            "contUSA": "continuous USA",
+            "Cent_NAme": "Central North America",
+            "Trop_SAme": "Tropical South America",
+            "Temp_SAme": "Temperate South America",
+            "NAfr": "Northern Africa",
+            "SAfr": "Southern Africa",
+            "Russia": "Russia",
+            "Oceania": "Oceania",
+            "Europe": "Europe",
+            "China": "China",
+            "India": "India",
+            "SE_Asia": "South East Asia",
+            "Temp_Eurasia_Japan": "Temperate Eurasia & Japan",
+            "Not affected": "Not affected",
+            //sources
+            "Agriwast": "Agriculture & Waste",
+            "BioBurBiof": "Biofuel & Biomass burning",
+            "Fossil": "Fossil fuel production & use",
+            "OtherNat": "Other Natural",
+            "Wetlands": "Wetlands"
+          };
+
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
 
@@ -224,63 +249,16 @@
                 div.transition()
                   .style("opacity", .9);
                 div.html(
-                  // d.source.name + ": " + d.target.name + "<br>" +
-                  //   "<br><b> mean: " + format(d.value) + " " + units + "</b>" +
-                  //   "<br> min:.... " + format(minValue) + " " + units +
-                  //   "<br> max:.... " + format(maxValue) + " " + units
-                  d.source.name + ": " + d.target.name + "<br><br>" +
+                  name_dict[d.source.name] + ": " + name_dict[d.target.name] + "<br><br>" +
                   "<table>" +
-                    // "<tr><td colspan='2'>" + d.source.name + ": " + d.target.name + "</td>" +
-                    // "</tr>" +
-
-                    "<tr>" +                     
+                    "<tr>" +
                       "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" + format(maxValue) + "]" + "</td>" +
                       "<td>" + " " + units + "</td>" +
                     "</tr>" +
-
-                    // "<tr>" +
-                    //   "<td> mean: </td>" +
-                    //   "<td>" + " " + format(d.value) + " " + "</td>" +
-                    //   "<td>" + " " + units + "</td>" +
-                    // "</tr>" +
-
-                    // "<tr>" +
-                    //   "<td>min: </td>" +
-                    //   "<td>" + " " + format(minValue) + " " + "</td>" +
-                    //   "<td>" + " " + units + "</td>" +
-                    // "</tr>" +
-
-                    // "<tr>" +
-                    //   "<td>max: </td>" +
-                    //   "<td>" + " " + format(maxValue) + " " + "</td>" +
-                    //   "<td>" + " " + units + "</td>" +
-                    // "</tr>" +
-
                   "</table>"
                   )
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY) + "px");
-
-
-              // <table>
-              //   <tr>
-              //     <td colspan="2">Trop: Wetlands</td>
-              //   </tr>
-              //   <tr>
-              //     <td><b>mean:</b></td>
-              //     <td><b>32 CH4</b></td>
-              //   </tr>
-              //   <tr>
-              //     <td>min:</td>
-              //     <td>25 CH4</td>
-              //   </tr>
-              //   <tr>
-              //     <td>max:</td>
-              //     <td>1 CH4</td>
-              //   </tr>
-              // </table> 
-
-
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -339,7 +317,7 @@
                 //Tooltip
                 div.transition()
                   .style("opacity", .9);
-                div.html(d.name + "<br><b>" + format(d.value) + " " + units + "</b>")
+                div.html(name_dict[d.name] + "<br><b>" + format(d.value) + " " + units + "</b>")
                   .style("left", (d3.event.pageX) + "px")
                   .style("top", (d3.event.pageY - 60) + "px");
               })
@@ -362,7 +340,7 @@
               .attr("text-anchor", "end")
               .attr("transform", null)
               .text(function(d) {
-                return d.name;
+                return name_dict[d.name];
               })
               .filter(function(d) {
                 return d.x < width / 2;
