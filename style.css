@@ -80,6 +80,22 @@
     left: 16px;
   }
 
+  #title_TD {
+    position: relative;
+    top: -628px;
+    left: 274px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  #title_BU {
+    position: relative;
+    top: -658px;
+    left: 917px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
   table, th, td {
     border: none;
     border-collapse: collapse;

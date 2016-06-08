@@ -34,8 +34,12 @@
 
       <div id="infotext" style="width: 700px;"></div>        
 
-      <p id="chart_TD"></p>
-      <p id="chart_BU"></p>
+      <p id="chart_TD">
+        <div id="title_TD">Top-Down Approach</div>
+      </p>
+      <p id="chart_BU">
+       <div id="title_BU">Bottom-Up Approach</div>
+     </p>
 
       <script src="sankey.js"></script>
       <script>
@@ -75,7 +79,7 @@
 
         function makeSankey(chart_div, jsonFile, sourceStats) {
           var margin = {
-            top: 100,
+            top: 130,
             right: 10,
             bottom: 10,
             left: 10
