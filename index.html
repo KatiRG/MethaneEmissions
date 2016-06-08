@@ -255,7 +255,7 @@
             // });
 
             // add the link tooltip
-            link.on("mouseover", function(d) {
+            link.on("mouseover", function(d) {              
 
                 var minValue = getStat(minStat, d),
                   maxValue = getStat(maxStat, d);
@@ -276,7 +276,7 @@
                   "</table>"
                   )
                   .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY) + "px");
+                  .style("top", (d3.event.pageY - 90) + "px");
               })
               .on("mouseout", function(d) {
                 //Restore opacity
@@ -332,34 +332,40 @@
 
             // add the node tooltip
             node.on("mouseover", function(d) {
-              //Retrieve mean, min, max
-              var gloStat = getGlobalStat(sourceStats, d);
 
-              //
+              if (d3.select(this).attr("class") === "node class-sources") {
+                //Retrieve mean, min, max
+                var gloStat = getGlobalStat(sourceStats, d);
 
-                //Tooltip
+                  //Tooltip
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(
+                    name_dict[d.name] + ":<br><br>" + 
+                    // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
+                    // units
+                     "<table>" +
+                      "<tr>" +
+                        "<td>" + "sum: " + "</td>" +
+                        "<td>" + format(d.value) + " " + units + "</td>" +
+                      "</tr>" +
+                      "<tr>" +
+                        "<td>" + "avg: " + "</td>" +
+                        "<td>" + "<b>" + gloStat[0] + "</b>" +
+                                  " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
+                                  " " + units + "</td>" +
+                      "</tr>" +
+                    "</table>"
+                    )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 100) + "px");
+              } else {
                 div.transition()
                   .style("opacity", .9);
-                div.html(
-                  name_dict[d.name] + ":<br><br>" + 
-                  // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
-                  // units
-                   "<table>" +          
-                    "<tr>" +
-                      "<td>" + "sum: " + "</td>" +
-                      "<td>" + format(d.value) + " " + units + "</td>" +
-                    "</tr>" +
-                    "<tr>" +
-                      "<td>" + "avg: " + "</td>" +
-                      "<td>" + "<b>" + gloStat[0] + "</b>" +
-                                " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
-                                " " + units + "</td>" +
-                    "</tr>" +
-                  "</table>"
-                  )
+                div.html(name_dict[d.name] + "<br><b>" + format(d.value) + " " + units + "</b>")
                   .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 60) + "px"
-                );
+                  .style("top", (d3.event.pageY - 60) + "px");
+              } 
 
               })
               .on("mouseenter", highlight_node_links)
