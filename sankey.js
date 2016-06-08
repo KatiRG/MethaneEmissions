@@ -171,7 +171,6 @@ d3.sankey = function() {
  
     function initializeNodeDepth() {
       var ky = d3.min(nodesByBreadth, function(nodes) {
-        console.log("return: ", (size[1] - (nodes.length - 1) * nodePadding) / d3.sum(nodes, value))
         //return (size[1] - (nodes.length - 1) * nodePadding) / d3.sum(nodes, value);
         return 0.60; //force scaling factor to have same value for both sankey diagrams
       });

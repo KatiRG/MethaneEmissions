@@ -43,19 +43,37 @@
         // http://bost.ocks.org/mike/sankey/
         // http://bl.ocks.org/git-ashish/8959771
 
+        var TD_sourceStats = [
+          {sourceName:"Fossil", mean: 111, min:77, max:133},
+          {sourceName:"Agriwast", mean: 196, min:175, max:207},
+          {sourceName:"BioBurBiof", mean: 32, min:29, max:44},
+          {sourceName:"Wetlands", mean: 169, min:159, max:175},
+          {sourceName:"OtherNat", mean: 51, min:21, max:47}
+          ];
+
+        var BU_sourceStats = [
+          {sourceName:"Fossil", mean: 121, min:114, max:133},
+          {sourceName:"Agriwast", mean: 195, min:178, max:206},
+          {sourceName:"BioBurBiof", mean: 30, min:27, max:35},
+          {sourceName:"Wetlands", mean: 185, min:153, max:227},
+          {sourceName:"OtherNat", mean: 199, min:104, max:297}
+          ];
+
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
           jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_mean_noZeros.json";
-        makeSankey(chart_div1, jsonFile1);
+        makeSankey(chart_div1, jsonFile1, TD_sourceStats);
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
           jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";
-        makeSankey(chart_div2, jsonFile2);
+        makeSankey(chart_div2, jsonFile2, BU_sourceStats);
+
+        
 
         var minStat, maxStat;
 
-        function makeSankey(chart_div, jsonFile) {
+        function makeSankey(chart_div, jsonFile, sourceStats) {
           var margin = {
             top: 100,
             right: 10,
@@ -125,11 +143,11 @@
             "Temp_Eurasia_Japan": "#e0e67f",
             "Not affected": "#563DBA",
             //sources
-            "Agriwast": "#886666",
-            "BioBurBiof": "#b0df65",
-            "Fossil": "#3b3131",
-            "OtherNat": "#AEC7E8",
-            "Wetlands": "#980043"
+            "Agriwast": "#87f4ff",
+            "BioBurBiof": "#ee3b3b",
+            "Fossil": "#d3d3d3",
+            "OtherNat": "#ffb5c5",
+            "Wetlands": "#b0df65"
           };
 
           var name_dict = {
@@ -155,7 +173,7 @@
             "Fossil": "Fossil fuel production & use",
             "OtherNat": "Other Natural",
             "Wetlands": "Wetlands"
-          };
+          };        
 
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
@@ -314,12 +332,35 @@
 
             // add the node tooltip
             node.on("mouseover", function(d) {
+              //Retrieve mean, min, max
+              var gloStat = getGlobalStat(sourceStats, d);
+
+              //
+
                 //Tooltip
                 div.transition()
                   .style("opacity", .9);
-                div.html(name_dict[d.name] + "<br><b>" + format(d.value) + " " + units + "</b>")
+                div.html(
+                  name_dict[d.name] + ":<br><br>" + 
+                  // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
+                  // units
+                   "<table>" +          
+                    "<tr>" +
+                      "<td>" + "sum: " + "</td>" +
+                      "<td>" + format(d.value) + " " + units + "</td>" +
+                    "</tr>" +
+                    "<tr>" +
+                      "<td>" + "avg: " + "</td>" +
+                      "<td>" + "<b>" + gloStat[0] + "</b>" +
+                                " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
+                                " " + units + "</td>" +
+                    "</tr>" +
+                  "</table>"
+                  )
                   .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 60) + "px");
+                  .style("top", (d3.event.pageY - 60) + "px"
+                );
+
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
@@ -329,6 +370,14 @@
                 div.transition()
                   .style("opacity", 0);
               });
+
+            function getGlobalStat(statObj, d) {
+              for (i = 0; i < Object.keys(statObj).length; i++) {
+                if (statObj[i].sourceName == d.name) {
+                return [statObj[i].mean, statObj[i].min, statObj[i].max];
+                }
+              }              
+            }  
 
             // add in the title for the nodes
             node.append("text")
