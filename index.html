@@ -269,7 +269,8 @@
                 div.html(
                   name_dict[d.source.name] + ": " + name_dict[d.target.name] + "<br><br>" +
                   "<table>" +
-                    "<tr>" +
+                    "<tr>" + 
+                    "<td>" + "mean: " + "</td>" +
                       "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" + format(maxValue) + "]" + "</td>" +
                       "<td>" + " " + units + "</td>" +
                     "</tr>" +
@@ -346,14 +347,14 @@
                     // units
                      "<table>" +
                       "<tr>" +
-                        "<td>" + "sum: " + "</td>" +
-                        "<td>" + format(d.value) + " " + units + "</td>" +
+                        "<td>" + "sum of means: " + "</td>" +
+                        "<td><b>" + format(d.value) + "</b>" + " " + units + "</td>" +
                       "</tr>" +
                       "<tr>" +
-                        "<td>" + "avg: " + "</td>" +
-                        "<td>" + "<b>" + gloStat[0] + "</b>" +
-                                  " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
-                                  " " + units + "</td>" +
+                        "<td>" + "global mean: " + "</td>" +
+                        "<td>" + gloStat[0] +
+                                 " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
+                                 " " + units + "</td>" +
                       "</tr>" +
                     "</table>"
                     )
@@ -362,9 +363,10 @@
               } else {
                 div.transition()
                   .style("opacity", .9);
-                div.html(name_dict[d.name] + "<br><b>" + format(d.value) + " " + units + "</b>")
+                div.html(name_dict[d.name] + ":<br><br>" +
+                  "sum of means: " + "<b>" + format(d.value) + "</b>" + " " + units )
                   .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 60) + "px");
+                  .style("top", (d3.event.pageY - 100) + "px");
               } 
 
               })
