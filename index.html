@@ -404,7 +404,37 @@
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 100) + "px");
-              } else {                
+              } else if (d3.select(this).attr("class") === "node sub-sources") {
+                console.log("d: ", d)
+                console.log("this: ", this)
+                
+
+                  // //Tooltip
+                  // div.transition()
+                  //   .style("opacity", .9);
+                  // div.html(
+                  //   name_dict[d.name] + ":<br><br>" + 
+                  //   // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
+                  //   // units
+                  //    "<table>" +
+                  //     "<tr>" +
+                  //       "<td>" + "sum of means: " + "</td>" +
+                  //       "<td><b>" + format(d.value) + "</b>" + " " + units + "</td>" +
+                  //     "</tr>" +
+                  //     "<tr>" +
+                  //       "<td>" + "global mean: " + "</td>" +
+                  //       "<td>" + gloStat[0] +
+                  //                " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
+                  //                " " + units + "</td>" +
+                  //     "</tr>" +
+                  //   "</table>"
+                  //   )
+                  //   .style("left", (d3.event.pageX) + "px")
+                  //   .style("top", (d3.event.pageY - 100) + "px");
+
+              }
+
+              else {                
                 if (d.name != "fakeSource") {
                   div.transition()
                     .style("opacity", .9);

@@ -84,11 +84,11 @@
 {"source": "Wetlands", "target": "India", "value": "6.00"},
 {"source": "Wetlands", "target": "SE_Asia", "value": "29.00"},
 {"source": "Wetlands", "target": "Temp_Eurasia_Japan", "value": "3.00"},
-{"source": "Coal", "target": "Fossil", "value": "41.00"},
-{"source": "GasAndOilIndustry", "target": "Fossil", "value": "79.00"},
-{"source": "EntFermMa", "target": "Agriwast", "value": "106.00"},
-{"source": "BiomassBurning", "target": "BioBurBiof", "value": "18.00"},
-{"source": "FreshWater", "target": "OtherNat", "value": "122.00"},
+{"source": "Coal", "target": "Fossil", "value": "41.00", "min": "26", "max": "50"},
+{"source": "GasAndOilIndustry", "target": "Fossil", "value": "79.00", "min": "69", "max": "88"},
+{"source": "EntFermMa", "target": "Agriwast", "value": "106.00", "min": "97", "max": "111"},
+{"source": "BiomassBurning", "target": "BioBurBiof", "value": "18.00", "min": "15", "max": "21"},
+{"source": "FreshWater", "target": "OtherNat", "value": "122.00", "min": "60", "max": "180"},
 {"source": "fakeSource", "target": "Wetlands", "value": "100.00"}
 ]
 }
