@@ -8,7 +8,6 @@
   }
   
   .node rect {
-    cursor: crosshair;
     fill-opacity: 1.0;
     shape-rendering: crispEdges;
   }
@@ -19,7 +18,6 @@
   }
   
   .link {
-    cursor: crosshair;
     fill: none;
     stroke: #000;
     stroke-opacity: .5;

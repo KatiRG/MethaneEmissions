@@ -182,9 +182,9 @@
             "Wetlands": "Wetlands",
             //sub-categories
             "Coal": "Coal",
-            "GasAndOilIndustry": "Gas and Oil Industry",
-            "EntFermMa": "Entteric fermenation and manure",
-            "BiomassBurning": "Biomass burning",
+            "GasAndOilIndustry": "Gas/Oil",
+            "EntFermMa": "Ruminants",
+            "BiomassBurning": "Biomass",
             "FreshWater": "Freshwater",
             "fakeSource": "fakeSource"
           };        
@@ -250,16 +250,27 @@
               .enter().append("path")
               .attr("class", "link")
               .attr("d", path)
-              .attr("id", function(d, i) {                
+              .attr("id", function (d, i) {                
                 d.id = i;
-                return "link-" + i;
+                if (d.source.name === "fakeSource") return "link-fake";
+                else return "link-" + i;
               })
               .style("stroke-width", function(d) {
                 return Math.max(1, d.dy);
               })
-              .style("stroke", function(d) {
+              .style("stroke", function (d) {
                 if (chart_div === "#chart_TD") return colour_dict[d.source.name];
                 else return colour_dict[d.target.name];
+              })
+              .style("opacity", function (d) {
+                if (d.source.name === "fakeSource") return 0;
+                else return 1;
+              })
+              .style("cursor", function (d) {                
+                if (d.source.name === "fakeSource") {                  
+                  return "auto";
+                } 
+                else return "crosshair";
               })
               .sort(function(a, b) {
                 return b.dy - a.dy;
@@ -270,33 +281,40 @@
             // });
 
             // add the link tooltip
-            link.on("mouseover", function(d) {              
+            link.on("mouseover", function(d) {
 
                 var minValue = getStat(minStat, d),
                   maxValue = getStat(maxStat, d);
 
                 //Reduce opacity of all but link that is moused over
-                d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5)
-
-                //Tooltip
-                div.transition()
-                  .style("opacity", .9);
-                div.html(
-                  name_dict[d.source.name] + ": " + name_dict[d.target.name] + "<br><br>" +
-                  "<table>" +
-                    "<tr>" + 
-                    "<td>" + "mean: " + "</td>" +
-                      "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" + format(maxValue) + "]" + "</td>" +
-                      "<td>" + " " + units + "</td>" +
-                    "</tr>" +
-                  "</table>"
-                  )
-                  .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 90) + "px");
+                if (this.id != "link-fake") {
+                  d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 0.5);
+                }
+                d3.select("#link-fake").style("opacity", 0);
+                
+                if (d.source.name != "fakeSource") {
+                  //Tooltip
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(
+                    name_dict[d.source.name] + ": " + name_dict[d.target.name] + "<br><br>" +
+                    "<table>" +
+                      "<tr>" + 
+                      "<td>" + "mean: " + "</td>" +
+                        "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" + format(maxValue) + "]" + "</td>" +
+                        "<td>" + " " + units + "</td>" +
+                      "</tr>" +
+                    "</table>"
+                    )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 90) + "px");
+                }
               })
               .on("mouseout", function(d) {
                 //Restore opacity
                 d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 1)
+                d3.select("#link-fake").style("opacity", 0);
+
                 div.transition()
                   .style("opacity", 0);
               });
@@ -322,6 +340,16 @@
               .attr("transform", function(d) {
                 col_xcoord.push(d.x); //x-coord of each Sankey col
                 return "translate(" + d.x + "," + d.y + ")";
+              })
+              .style("opacity", function (d) {
+                if (d.name === "fakeSource") return 0;
+                else return 1;
+              })
+              .style("cursor", function (d) {                
+                if (d.name === "fakeSource") {                  
+                  return "auto";
+                } 
+                else return "crosshair";
               })
               //.on("click", highlight_node_links)
               .call(function() {
@@ -376,13 +404,15 @@
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 100) + "px");
-              } else {
-                div.transition()
-                  .style("opacity", .9);
-                div.html(name_dict[d.name] + ":<br><br>" +
-                  "sum of means: " + "<b>" + format(d.value) + "</b>" + " " + units )
-                  .style("left", (d3.event.pageX) + "px")
-                  .style("top", (d3.event.pageY - 100) + "px");
+              } else {                
+                if (d.name != "fakeSource") {
+                  div.transition()
+                    .style("opacity", .9);
+                  div.html(name_dict[d.name] + ":<br><br>" +
+                    "sum of means: " + "<b>" + format(d.value) + "</b>" + " " + units )
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 100) + "px");
+                }
               } 
 
               })
@@ -458,7 +488,7 @@
 
               //Translate sources
               if (chart_div === "#chart_TD") deltaX = 0;
-              else deltaX = 255;
+              else deltaX = 220;
               translateNode(chart_div,"g.node.class-sources", deltaX, displacement_dict);
 
               //Translate sub-sources
@@ -607,38 +637,40 @@
           }
 
           //Modified from http://bl.ocks.org/git-ashish/8959771
-          function highlight_node_links(node, i) {
+          function highlight_node_links(node, i) {            
+            if (node.name != "fakeSource") {
 
-            var remainingNodes = [],
-              nextNodes = [];
-
-            var stroke_opacity = 1.0;
-
-            var traverse = [{
-              linkType: "sourceLinks",
-              nodeType: "target"
-            }, {
-              linkType: "targetLinks",
-              nodeType: "source"
-            }];
-
-            traverse.forEach(function(step) {
-              node[step.linkType].forEach(function(link) {
-                remainingNodes.push(link[step.nodeType]);
-                highlight_link(link.id, stroke_opacity);
-              });
-
-              while (remainingNodes.length) {
+              var remainingNodes = [],
                 nextNodes = [];
-                remainingNodes.forEach(function(node) {
-                  node[step.linkType].forEach(function(link) {
-                    nextNodes.push(link[step.nodeType]);
-                    highlight_link(link.id, stroke_opacity);
-                  });
+
+              var stroke_opacity = 1.0;
+
+              var traverse = [{
+                linkType: "sourceLinks",
+                nodeType: "target"
+              }, {
+                linkType: "targetLinks",
+                nodeType: "source"
+              }];
+
+              traverse.forEach(function(step) {
+                node[step.linkType].forEach(function(link) {
+                  remainingNodes.push(link[step.nodeType]);
+                  highlight_link(link.id, stroke_opacity);
                 });
-                remainingNodes = nextNodes;
-              }
-            });
+
+                while (remainingNodes.length) {
+                  nextNodes = [];
+                  remainingNodes.forEach(function(node) {
+                    node[step.linkType].forEach(function(link) {
+                      nextNodes.push(link[step.nodeType]);
+                      highlight_link(link.id, stroke_opacity);
+                    });
+                  });
+                  remainingNodes = nextNodes;
+                }
+              });
+            } //end if
           }
 
           function highlight_link(id, opacity) {
