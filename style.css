@@ -78,24 +78,43 @@
     position: relative;
     top: 75px;
     left: 16px;
+    width: 950px;
   }
 
   #title_TD {
     position: relative;
-    top: -628px;
+    top: -618px;
     left: 274px;
     font-size: 14px;
     font-weight: bold;
+    width: 300px;
   }
 
   #title_BU {
     position: relative;
-    top: -658px;
+    top: -668px;
     left: 917px;
     font-size: 14px;
     font-weight: bold;
+    width: 300px;
   }
 
+  #subtitle_TD {
+    position: relative;
+    top: -617px;
+    left: 246px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
+  #subtitle_BU {
+    position: relative;
+    top: -667px;
+    left: 881px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
   table, th, td {
     border: none;
     border-collapse: collapse;

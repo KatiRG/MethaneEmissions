@@ -32,13 +32,15 @@
     <!-- Begin page content -->
     <div class="container">
 
-      <div id="infotext" style="width: 700px;"></div>        
+      <div id="infotext"></div>        
 
       <p id="chart_TD">
-        <div id="title_TD">Top-Down Approach</div>
+        <div id="title_TD">Top-Down budget (2003&ndash;2012)</div>
+        <div id="subtitle_TD">Global sources: 558 [540&ndash;568] Tg CH4 yr<sup>-1</sup></div>
       </p>
       <p id="chart_BU">
-       <div id="title_BU">Bottom-Up Approach</div>
+       <div id="title_BU">Bottom-Up budget (2003&ndash;2012)</div>
+       <div id="subtitle_BU">Global sources: 736 [596&ndash;884] Tg CH4 yr<sup>-1</sup></div>
      </p>
 
       <script src="sankey.js"></script>
@@ -78,7 +80,7 @@
 
         function makeSankey(chart_div, jsonFile, sourceStats) {          
           var margin = {
-            top: 130,
+            top: 150,
             right: 10,
             bottom: 10,
             left: 10
@@ -213,7 +215,7 @@
 
           function make(graph, minStat, maxStat) {            
             // Display info text for Sankey diagram
-            d3.select("#infotext").html("Le bilan des sources de méthane est vu par deux approches, l'approche Bottom-up (BU) (droit) et l'approche Top-Down TD (gauche). Les sources sont divisées en 5 catégories. Les valeurs réprésentent les estimations des means.")
+            d3.select("#infotext").html("Methane source estimates over the period 2003&ndash;2012 from two approaches: Top-Down (left) and Bottom-Up (right). Regional contributions were calculated for 14 continental regions and divided into five broad source categories (Fossil fuel production & use, Agriculture & Waste, Biomass & Biofuel burning, Wetlands, and Other Natural sources). Global estimates from the Bottom-Up approach are further classed into finer subcategories.")
               .style("display", "block");
 
             var nodeMap = {};
