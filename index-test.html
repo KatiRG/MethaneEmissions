@@ -47,13 +47,7 @@
         // http://bost.ocks.org/mike/sankey/
         // http://bl.ocks.org/git-ashish/8959771
 
-        var TD_sourceStats = [
-          {sourceName:"Fossil", mean: 111, min:77, max:133},
-          {sourceName:"Agriwast", mean: 196, min:175, max:207},
-          {sourceName:"BioBurBiof", mean: 32, min:29, max:44},
-          {sourceName:"Wetlands", mean: 169, min:159, max:175},
-          {sourceName:"OtherNat", mean: 51, min:21, max:47}
-          ];
+
 
         var BU_sourceStats = [
           {sourceName:"Fossil", mean: 121, min:114, max:133},
@@ -63,21 +57,17 @@
           {sourceName:"OtherNat", mean: 199, min:104, max:297}
           ];
 
-        //Top-down Sankey
-        var chart_div1 = "#chart_TD",
-          jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_mean_noZeros.json";
-        makeSankey(chart_div1, jsonFile1, TD_sourceStats);
-
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";          
+          //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";
+          jsonFile2 = "data/test.json";
         makeSankey(chart_div2, jsonFile2, BU_sourceStats);
 
         
 
         var minStat, maxStat;
 
-        function makeSankey(chart_div, jsonFile, sourceStats) {
+        function makeSankey(chart_div, jsonFile, sourceStats) {          
           var margin = {
             top: 130,
             right: 10,
@@ -122,11 +112,6 @@
 
           var units = "Tg CH4 yr <sup>-1</sup>";
 
-          Coal_color = "#3B3131";
-          Oil_color = "#886666";
-          Gas_color = "#AEC7E8";
-          GasFlaring_color = "#AEC7E8";
-          Cement_color = "#666688";
 
           //https://www.colorcodehex.com/eff3ff/
           var colour_dict = {
@@ -154,7 +139,11 @@
             "Wetlands": "#b0df65",
             //sub-categories
             "Coal": "blue",
-            "GasAndOilIndustry": "red"
+            "GasAndOilIndustry": "red",
+            "EntFermMa": "green",
+            "BiomassBurning": "pink",
+            "FreshWater": "orange",
+            "fakeSource": "gray"
           };
 
           var name_dict = {
@@ -181,11 +170,18 @@
             "OtherNat": "Other Natural",
             "Wetlands": "Wetlands",
             //sub-categories
-            "Coal": "Coal"
+            "Coal": "Coal",
+            "GasAndOilIndustry": "Gas and Oil Industry",
+            "EntFermMa": "Entteric fermenation and manure",
+            "BiomassBurning": "Biomass burning",
+            "FreshWater": "Freshwater",
+            "fakeSource": "fakeSource"
           };        
 
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
+          //class labels for sub-category  nodes only
+          var subCategories = ["Coal", "GasAndOilIndustry", "EntFermMa", "BiomassBurning", "FreshWater", "fakeSource"];
 
           var minFile, maxFile;
 
@@ -243,7 +239,7 @@
               .enter().append("path")
               .attr("class", "link")
               .attr("d", path)
-              .attr("id", function(d, i) {
+              .attr("id", function(d, i) {                
                 d.id = i;
                 return "link-" + i;
               })
@@ -309,6 +305,7 @@
               //.attr("class", "node")
               .attr("class", function(d) {
                 if (categories.indexOf(d.name) != -1) return "node class-sources";
+                else if (subCategories.indexOf(d.name) != -1) return "node sub-sources";
                 else return "node";
               })
               .attr("transform", function(d) {
@@ -437,25 +434,44 @@
                 "Wetlands": 291,
                 "Fossil": 0
               };
+              //For sources only
+              var sub_displacement_dict = {
+                "Coal": 0,
+                "GasAndOilIndustry": 28,
+                "EntFermMa": 110,
+                "BiomassBurning": 244,
+                "FreshWater": 425,
+                "fakeSource": 300
+              };
               var link = d3.selectAll("path.link");
 
-              d3.selectAll("g.node.class-sources") //here's how you get all the nodes
-                .each(function(d, idx) {
+              //Translate sources
+              translateNode("g.node.class-sources", 255, displacement_dict);
 
+              //Translate sub-sources
+              translateNode("g.node.sub-sources", 0, sub_displacement_dict);
+
+              //Sort region rects of TD chart in descending order. Use same order for BU regions.
+              //Call only once.
+             // if (chart_div === "#chart_BU") sortRegions();
+
+              sankey.relayout();
+              link.attr("d", path);
+
+            }
+
+            //Translate nodes
+            function translateNode(nodeClass, deltaX, displacement_dict) {
+
+              d3.selectAll(nodeClass) //here's how you get all the nodes
+                .each(function(d, idx) {
                   d3.select(this).attr("transform",
                     "translate(" + (
-                      d.x = d.x
+                      d.x = d.x - deltaX
                     ) + "," + (
                       d.y = displacement_dict[d.name]
                     ) + ")");
                 });
-
-              //Sort region rects of TD chart in descending order. Use same order for BU regions.
-              //Call only once.
-              if (chart_div === "#chart_BU") sortRegions();
-
-              sankey.relayout();
-              link.attr("d", path);
 
             }
 
