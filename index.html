@@ -77,7 +77,8 @@
           jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_3levels.json";
         makeSankey(chart_div2, jsonFile2, BU_sourceStats);
 
-        var minStat, maxStat;
+        var minStat, maxStat; //objects to store min and max statistics
+        var yshift_tooltip = 90; //amount to raise tooltip in y-dirn
 
         function makeSankey(chart_div, jsonFile, sourceStats) {          
           var margin = {
@@ -217,8 +218,10 @@
           var minFile, maxFile;
 
           if (chart_div === "#chart_BU") {
-            minFile = "data/Sankey_BU_2003-2012_25MAy2016_min.json";
-            maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max.json";
+            // minFile = "data/Sankey_BU_2003-2012_25MAy2016_min.json";
+            // maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max.json";
+            minFile = "data/Sankey_BU_2003-2012_25MAy2016_min_3levels.json";
+            maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max_3levels.json";
           } else {
             minFile = "data/Sankey_TD_2003-2012_25MAy2016_min.json";
             maxFile = "data/Sankey_TD_2003-2012_25MAy2016_max.json";
@@ -327,7 +330,7 @@
                     "</table>"
                     )
                     .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 90) + "px");
+                    .style("top", (d3.event.pageY - yshift_tooltip) + "px");
                 }
               })
               .on("mouseout", function(d) {
@@ -423,45 +426,38 @@
                     "</table>"
                     )
                     .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 100) + "px");
-              } else if (d3.select(this).attr("class") === "node sub-sources") {
-                console.log("d: ", d)
-                console.log("this: ", this)
-                
+                    .style("top", (d3.event.pageY - yshift_tooltip) + "px");
+              } 
+              else if (d3.select(this).attr("class") === "node sub-sources") {
 
-                  // //Tooltip
-                  // div.transition()
-                  //   .style("opacity", .9);
-                  // div.html(
-                  //   name_dict[d.name] + ":<br><br>" + 
-                  //   // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
-                  //   // units
-                  //    "<table>" +
-                  //     "<tr>" +
-                  //       "<td>" + "sum of means: " + "</td>" +
-                  //       "<td><b>" + format(d.value) + "</b>" + " " + units + "</td>" +
-                  //     "</tr>" +
-                  //     "<tr>" +
-                  //       "<td>" + "global mean: " + "</td>" +
-                  //       "<td>" + gloStat[0] +
-                  //                " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
-                  //                " " + units + "</td>" +
-                  //     "</tr>" +
-                  //   "</table>"
-                  //   )
-                  //   .style("left", (d3.event.pageX) + "px")
-                  //   .style("top", (d3.event.pageY - 100) + "px");
+                var minValue = getSubStats(minStat, d),
+                    maxValue = getSubStats(maxStat, d);
 
+                //Tooltip
+                div.transition()
+                   .style("opacity", .9);
+                div.html(
+                  name_dict[d.name] + ": " + name_dict[d.sourceLinks[0].target.name] + "<br><br>" +
+                    "<table>" +
+                      "<tr>" + 
+                      "<td>" + "mean: " + "</td>" +
+                        "<td><b>" + format(d.value) + "</b>" + " [" + format(minValue) + "&ndash;" +format(maxValue) + "]" + "</td>" +
+                        "<td>" + " " + units + "</td>" +
+                      "</tr>" +
+                    "</table>"
+                  )
+                  .style("left", (d3.event.pageX) + "px")
+                  .style("top", (d3.event.pageY - yshift_tooltip) + "px");
               }
 
-              else {                
+              else {
                 if (d.name != "fakeSource") {
                   div.transition()
                     .style("opacity", .9);
                   div.html(name_dict[d.name] + ":<br><br>" +
                     "sum of means: " + "<b>" + format(d.value) + "</b>" + " " + units )
                     .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 100) + "px");
+                    .style("top", (d3.event.pageY - yshift_tooltip) + "px");
                 }
               } 
 
@@ -474,6 +470,14 @@
                 div.transition()
                   .style("opacity", 0);
               });
+
+            function getSubStats(statObj, d) {
+              for (i = 0; i < Object.keys(statObj.links).length; i++) {
+                if (statObj.links[i].source == d.name ) {
+                  return statObj.links[i].value;
+                }
+              }
+            }      
 
             function getGlobalStat(statObj, d) {
               for (i = 0; i < Object.keys(statObj).length; i++) {
