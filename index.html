@@ -73,7 +73,8 @@
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
           //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";
-          jsonFile2 = "data/test.json";
+          //jsonFile2 = "data/test.json";
+          jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_3levels.json";
         makeSankey(chart_div2, jsonFile2, BU_sourceStats);
 
         var minStat, maxStat;
@@ -149,12 +150,20 @@
             "OtherNat": "#ffb5c5",
             "Wetlands": "#b0df65",
             //sub-categories
-            "Coal": "blue",
-            "GasAndOilIndustry": "red",
-            "EntFermMa": "green",
-            "BiomassBurning": "pink",
-            "FreshWater": "orange",
-            "fakeSource": "gray"
+            "Termites": "#f7fcf0",
+            "Wildfires": "#e0f3db",
+            "WildAnimals": "#ccebc5",
+            "EntericFermentationAndManure": "#a8ddb5",
+            "LandfillsAndWaste": "#7bccc4",
+            "GeologicalSources": "#4eb3d3",
+            "PermafrostAndHydrates": "#2b8cbe",
+            "Rice": "#0868ac",
+            "Coal": "#084081",
+            "GasAndOilIndustry": "#fff7fb",
+            "BiofuelBurning": "#ece2f0",
+            "BiomassBurning": "#d0d1e6",
+            "Freshwater": "#a6bddb",
+            "fakeSource": "#67a9cf"
           };
 
           var name_dict = {
@@ -181,18 +190,29 @@
             "OtherNat": "Other Natural",
             "Wetlands": "Wetlands",
             //sub-categories
+            "Termites": "Termites",
+            "Wildfires": "Wildfires",
+            "WildAnimals": "Wild Animals",
+            "EntericFermentationAndManure": "Ruminants",
+            "LandfillsAndWaste": "Landfills",
+            "GeologicalSources": "Geological",
+            "PermafrostAndHydrates": "Hydrates",
+            "Rice": "Rice",
             "Coal": "Coal",
             "GasAndOilIndustry": "Gas/Oil",
-            "EntFermMa": "Ruminants",
+            "BiofuelBurning": "Biofuel",
             "BiomassBurning": "Biomass",
-            "FreshWater": "Freshwater",
+            "Freshwater": "Freshwater",
             "fakeSource": "fakeSource"
           };        
 
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
           //class labels for sub-category  nodes only
-          var subCategories = ["Coal", "GasAndOilIndustry", "EntFermMa", "BiomassBurning", "FreshWater", "fakeSource"];
+          var subCategories = ["Termites", "Wildfires", "WildAnimals", "EntericFermentationAndManure", 
+              "LandfillsAndWaste", "GeologicalSources", "PermafrostAndHydrates", "Rice", 
+              "Coal", "GasAndOilIndustry", "BiofuelBurning", "BiomassBurning", "Freshwater", 
+              "fakeSource"];
 
           var minFile, maxFile;
 
@@ -332,10 +352,10 @@
               .data(graph.nodes)
               .enter().append("g")
               //.attr("class", "node")
-              .attr("class", function(d) {
+              .attr("class", function(d) {                
                 if (categories.indexOf(d.name) != -1) return "node class-sources";
                 else if (subCategories.indexOf(d.name) != -1) return "node sub-sources";
-                else return "node";
+                else return "node regions";
               })
               .attr("transform", function(d) {
                 col_xcoord.push(d.x); //x-coord of each Sankey col
@@ -351,7 +371,7 @@
                 } 
                 else return "crosshair";
               })
-              //.on("click", highlight_node_links)
+              .on("click", highlight_node_links)
               .call(function() {
                 manualLayout();
               })
@@ -508,13 +528,22 @@
               //For sources only
               var sub_displacement_dict = {
                 "Coal": 0,
-                "GasAndOilIndustry": 28,
-                "EntFermMa": 110,
-                "BiomassBurning": 244,
-                "FreshWater": 425,
+                "GasAndOilIndustry": 29,
+                "EntericFermentationAndManure": 96,
+                "LandfillsAndWaste": 164,
+                "Rice": 203,
+                "BiomassBurning": 261,
+                "BiofuelBurning": 246,
+                "Freshwater": 374,
+                "GeologicalSources": 454,
+                "Termites": 495,
+                "WildAnimals": 510,
+                "Wildfires": 526,
+                "PermafrostAndHydrates": 538,
                 "fakeSource": 300
               };
               var link = d3.selectAll("path.link");
+
 
               //Translate sources
               if (chart_div === "#chart_TD") deltaX = 0;
@@ -537,7 +566,7 @@
             function translateNode(chart_div, nodeClass, deltaX, displacement_dict) {
 
               d3.select(chart_div).selectAll(nodeClass)
-                .each(function(d, idx) {
+                .each(function(d, idx) {                  
                   d3.select(this).attr("transform",
                     "translate(" + (
                       d.x = d.x - deltaX
@@ -559,7 +588,7 @@
               var store_place = []; //placeholder
               delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
 
-              // Sort the rect heights in descending order and store in array      
+              // Sort the rect heights in descending order and store in array
               d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
                 .each(function(d, idx) {
 
@@ -574,7 +603,7 @@
 
               //Find names corresponding to yheight
               //Used in last selection loop to find rank of rects
-              d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
+              d3.select("#chart_TD").selectAll(".regions")
                 .each(function(d, idx) {
 
                   var idx_place = yheight.indexOf(d.dy); //order for sorted names
@@ -590,7 +619,7 @@
                 });
 
               //Add "Not affected" to ynames for BU chart only!!!
-              ynames[ynames.length] = "Not affected";              
+              ynames[ynames.length] = "Not affected";
 
               //Store heights of BU rects in dict
               var yheightBU_dict = {
@@ -610,11 +639,9 @@
                 "Bor_NAme": 0,
                 "Not affected": 0
               };
-              d3.select("#chart_BU").selectAll(".node:not(." + "class-sources" + ")")
+              d3.select("#chart_BU").selectAll(".regions")
                 .each(function(d, idx) {
-                  if (d3.select(this).attr("class") != "node sub-sources") {
-                    yheightBU_dict[d.name] = d.dy;
-                  }
+                  yheightBU_dict[d.name] = d.dy;
                 });
 
               //Calculate new y-coords of TD rects.
@@ -635,9 +662,8 @@
               plotRects("#chart_BU", yval_BU);
 
               function plotRects(chart_div, ycoords) {
-                d3.select(chart_div).selectAll(".node:not(." + "class-sources" + ")")
+                d3.select(chart_div).selectAll(".regions")
                   .each(function(d, idx) {
-                    if (d3.select(this).attr("class") != "node sub-sources") {
                       var idx_place = ynames.indexOf(d.name);
 
                       d3.select(this).attr("transform",
@@ -646,7 +672,6 @@
                         ) + "," + (
                           d.y = ycoords[idx_place]
                         ) + ")");
-                    }
                   });
               }
 
