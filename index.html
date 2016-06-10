@@ -143,7 +143,7 @@
             "India": "#dd1c77",
             "SE_Asia": "#ff80af",
             "Temp_Eurasia_Japan": "#e0e67f",
-            "Not affected": "#563DBA",
+            "Not affected": "#b8b0e6",
             //sources
             "Agriwast": "#87f4ff",
             "BioBurBiof": "#ee3b3b",
@@ -183,7 +183,7 @@
             "India": "India",
             "SE_Asia": "South East Asia",
             "Temp_Eurasia_Japan": "Temperate Eurasia & Japan",
-            "Not affected": "Not affected",
+            "Not affected": "Not (yet) affected",
             //sources
             "Agriwast": "Agriculture & Waste",
             "BioBurBiof": "Biofuel & Biomass burning",
@@ -590,7 +590,7 @@
                 yval_BU = []; //array to store calculated ycoords
               var ynames = []; //array to store sorted names
               var store_place = []; //placeholder
-              delta = 10; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
+              delta = 8; //spacing between rects. DO NOT CHANGE; PRESET BY ALGORITHM        
 
               // Sort the rect heights in descending order and store in array
               d3.select("#chart_TD").selectAll(".node:not(." + "class-sources" + ")")
