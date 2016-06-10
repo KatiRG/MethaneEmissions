@@ -101,7 +101,7 @@
 {"source": "LandfillsAndWaste", "target": "Agriwast", "value": "63.00"},
 {"source": "Coal", "target": "Fossil", "value": "50.00"},
 {"source": "BiomassBurning", "target": "BioBurBiof", "value": "21.00"},
-{"source": "GeologicalSources", "target": "OtherNat", "value": "-1000.00"},
+{"source": "GeologicalSources", "target": "OtherNat", "value": "76.00"},
 {"source": "PermafrostAndHydrates", "target": "OtherNat", "value": "-889.00"},
 {"source": "Rice", "target": "Agriwast", "value": "36.00"},
 {"source": "BiofuelBurning", "target": "BioBurBiof", "value": "14.00"},
