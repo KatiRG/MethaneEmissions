@@ -19,7 +19,21 @@
 {"name": "India"},
 {"name": "SE_Asia"},
 {"name": "Temp_Eurasia_Japan"},
-{"name": "Not affected"}
+{"name": "Not affected"},
+{"name": "Termites"},
+{"name": "Wildfires"},
+{"name": "Freshwater"},
+{"name": "WildAnimals"},
+{"name": "EntericFermentationAndManure"},
+{"name": "fakeSource"},
+{"name": "LandfillsAndWaste"},
+{"name": "Coal"},
+{"name": "BiomassBurning"},
+{"name": "GeologicalSources"},
+{"name": "PermafrostAndHydrates"},
+{"name": "Rice"},
+{"name": "BiofuelBurning"},
+{"name": "GasAndOilIndustry"}
 ],
 "links": [
 {"source": "Agriwast", "target": "Bor_NAme", "value": "3.00"},
@@ -77,6 +91,20 @@
 {"source": "Wetlands", "target": "China", "value": "5.00"},
 {"source": "Wetlands", "target": "India", "value": "6.00"},
 {"source": "Wetlands", "target": "SE_Asia", "value": "29.00"},
-{"source": "Wetlands", "target": "Temp_Eurasia_Japan", "value": "3.00"}
+{"source": "Wetlands", "target": "Temp_Eurasia_Japan", "value": "3.00"},
+{"source": "Termites", "target": "OtherNat", "value": "9.00"},
+{"source": "Wildfires", "target": "OtherNat", "value": "3.00"},
+{"source": "Freshwater", "target": "OtherNat", "value": "122.00"},
+{"source": "WildAnimals", "target": "OtherNat", "value": "10.00"},
+{"source": "EntericFermentationAndManure", "target": "Agriwast", "value": "106.00"},
+{"source": "fakeSource", "target": "Wetlands", "value": "100.00"},
+{"source": "LandfillsAndWaste", "target": "Agriwast", "value": "59.00"},
+{"source": "Coal", "target": "Fossil", "value": "41.00"},
+{"source": "BiomassBurning", "target": "BioBurBiof", "value": "18.00"},
+{"source": "GeologicalSources", "target": "OtherNat", "value": "52.00"},
+{"source": "PermafrostAndHydrates", "target": "OtherNat", "value": "3.00"},
+{"source": "Rice", "target": "Agriwast", "value": "30.00"},
+{"source": "BiofuelBurning", "target": "BioBurBiof", "value": "12.00"},
+{"source": "GasAndOilIndustry", "target": "Fossil", "value": "79.00"}
 ]
 }

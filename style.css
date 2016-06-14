@@ -8,7 +8,6 @@
   }
   
   .node rect {
-    cursor: crosshair;
     fill-opacity: 1.0;
     shape-rendering: crispEdges;
   }
@@ -19,7 +18,6 @@
   }
   
   .link {
-    cursor: crosshair;
     fill: none;
     stroke: #000;
     stroke-opacity: .5;
@@ -78,8 +76,43 @@
     position: relative;
     top: 75px;
     left: 16px;
+    width: 950px;
   }
 
+  #title_TD {
+    position: relative;
+    top: -618px;
+    left: 274px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
+
+  #title_BU {
+    position: relative;
+    top: -668px;
+    left: 917px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
+
+  #subtitle_TD {
+    position: relative;
+    top: -617px;
+    left: 246px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
+  #subtitle_BU {
+    position: relative;
+    top: -667px;
+    left: 881px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 300px;
+  }
   table, th, td {
     border: none;
     border-collapse: collapse;
