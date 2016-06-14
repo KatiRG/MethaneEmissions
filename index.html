@@ -206,7 +206,15 @@
             "BiomassBurning": "Biomass",
             "Freshwater": "Freshwater",
             "fakeSource": "fakeSource"
-          };        
+          };
+
+          var reverse_name_dict = {
+            "Agriculture & Waste": "Agriwast",
+            "Biofuel & Biomass burning": "BioBurBiof",
+            "Fossil fuel production & use": "Fossil",
+            "Other Natural": "OtherNat",
+            "Wetlands": "Wetlands"
+          };
 
           //class labels for category  nodes only
           var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
@@ -278,7 +286,7 @@
                 if (chart_div === "#chart_BU") {
                   if (categories.indexOf(d.target.name) != -1 ){
                     if (subCategories.indexOf(d.source.name) != -1) {
-                      return "link link-subsources";
+                      return "link link-subsources belongsTo-" + d.target.name;
                     }
                   } else return "link"; 
                 } else return "link";
@@ -373,9 +381,11 @@
               .data(graph.nodes)
               .enter().append("g")
               //.attr("class", "node")
-              .attr("class", function(d) {                
+              .attr("class", function(d) {
                 if (categories.indexOf(d.name) != -1) return "node class-sources";
-                else if (subCategories.indexOf(d.name) != -1) return "node sub-sources";
+                else if (subCategories.indexOf(d.name) != -1) {
+                  return "node sub-sources belongsTo-" + d.sourceLinks[0].target.name;
+                }                  
                 else return "node regions";
               })
               .attr("transform", function(d) {
@@ -386,8 +396,8 @@
                 if (d.name === "fakeSource") return 0;
                 else return 1;
               })
-              .style("cursor", function (d) {                
-                if (d.name === "fakeSource") {                  
+              .style("cursor", function (d) {
+                if (d.name === "fakeSource") {
                   return "auto";
                 } 
                 else return "crosshair";
@@ -425,20 +435,21 @@
             node.on("mouseover", function(d) {
 
               if (d3.select(this).attr("class") === "node class-sources") {
-                //show all sub-sources and their links
-                d3.selectAll(".sub-sources").style("display", "inline");
-                d3.selectAll(".link-subsources").style("display", "inline");
 
                 //Retrieve mean, min, max
                 var gloStat = getGlobalStat(sourceStats, d);
 
+                if (chart_div === "#chart_BU") {
+                  //show all sub-sources and their links belonging to source
+                  d3.selectAll(".belongsTo-" + reverse_name_dict[d3.select(this).text()])
+                    .style("display", "inline");
+                }
+            
                   //Tooltip
                   div.transition()
                     .style("opacity", .9);
                   div.html(
-                    name_dict[d.name] + ":<br><br>" + 
-                    // "<b>" + gloStat[0] + "</b>" + " [" + gloStat[1] + "&ndash;" + gloStat[2] + "] " +
-                    // units
+                    name_dict[d.name] + ":<br><br>" +
                      "<table>" +
                       "<tr>" +
                         "<td>" + "sum of means: " + "</td>" +
@@ -453,8 +464,9 @@
                     "</table>"
                     )
                     .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - yshift_tooltip) + "px");
-              } 
+                    .style("top", (d3.event.pageY - yshift_tooltip - 40) + "px");
+                
+              }
               else if (d3.select(this).attr("class") === "node sub-sources") {                
 
                 var minValue = getSubStats(minStat, d),
@@ -492,6 +504,7 @@
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
+
                 //hide all sub-sources and their links
                 d3.selectAll(".sub-sources").style("display", "none");
                 d3.selectAll(".link-subsources").style("display", "none");
