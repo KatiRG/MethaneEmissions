@@ -442,6 +442,7 @@
                       .style("display", "inline");
                 }
             
+                if (chart_div === "#chart_BU" && name_dict[d.name] === "Wetlands") {
                   //Tooltip
                   div.transition()
                     .style("opacity", .9);
@@ -458,10 +459,38 @@
                                  " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
                                  " " + units + "</td>" +
                       "</tr>" +
+                      "<tr>" +
+                        "<td>" + "<br>" + "</td>" +
+                      "</tr>" +
+                      "<tr>" +  
+                        "<td>" + "No sub-categories for Wetlands " + "</td>" +
+                      "</tr>" +
                     "</table>"
                     )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - yshift_tooltip - 40) + "px");
+                  } else {
+                    //Tooltip
+                    div.transition()
+                      .style("opacity", .9);
+                    div.html(
+                      name_dict[d.name] + ":<br><br>" +
+                       "<table>" +
+                        "<tr>" +
+                          "<td>" + "sum of means: " + "</td>" +
+                          "<td><b>" + format(d.value) + "</b>" + " " + units + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                          "<td>" + "global mean: " + "</td>" +
+                          "<td>" + gloStat[0] +
+                                   " [" + gloStat[1] + "&ndash;" + gloStat[2] + "]" +
+                                   " " + units + "</td>" +
+                        "</tr>" +
+                      "</table>"
+                      )
+                      .style("left", (d3.event.pageX) + "px")
+                      .style("top", (d3.event.pageY - yshift_tooltip - 40) + "px");
+                  }
                 
               }
               else if (d3.select(this).attr("class") === "node sub-sources") {                
