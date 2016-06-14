@@ -8,7 +8,6 @@
 <script src="lib/bootstrap.min.js"></script>
 <link href="lib/sticky-footer-navbar.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet" type="text/css">
-<script src="lib/colorbrewer.js"></script>
 
 <title>Methane Budget</title>
 
@@ -67,14 +66,11 @@
 
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
-          jsonFile1 = "data/Sankey_TD_2003-2012_10june2016_mean_noZeros.json";
-          //jsonFile1 = "data/Sankey_TD_2003-2012_25MAy2016_mean_noZeros.json";
+          jsonFile1 = "data/Sankey_TD_2003-2012_10june2016_mean_noZeros.json";          
         makeSankey(chart_div1, jsonFile1, TD_sourceStats);  
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          //jsonFile2 = "data/Sankey_BU_2003-2012_25MAy2016_mean_noZeros.json";
-          //jsonFile2 = "data/test.json";
           jsonFile2 = "data/Sankey_BU_2003-2012_10june2016_mean_3levels.json";
         makeSankey(chart_div2, jsonFile2, BU_sourceStats);
 
@@ -152,19 +148,19 @@
             "OtherNat": "#ffb5c5",
             "Wetlands": "#b0df65",
             //sub-categories
-            "Termites": "#f7fcf0",
-            "Wildfires": "#e0f3db",
-            "WildAnimals": "#ccebc5",
-            "EntericFermentationAndManure": "#a8ddb5",
-            "LandfillsAndWaste": "#7bccc4",
-            "GeologicalSources": "#4eb3d3",
-            "PermafrostAndHydrates": "#2b8cbe",
-            "Rice": "#0868ac",
-            "Coal": "#084081",
-            "GasAndOilIndustry": "#fff7fb",
-            "BiofuelBurning": "#ece2f0",
-            "BiomassBurning": "#d0d1e6",
-            "Freshwater": "#a6bddb",
+            "Coal": "#e9e9e9",
+            "GasAndOilIndustry": "#e9e9e9",
+            "EntericFermentationAndManure": "#aef8ff",
+            "LandfillsAndWaste": "#aef8ff",
+            "Rice": "#aef8ff",
+            "BiofuelBurning": "#f37575",
+            "BiomassBurning": "#f37575",
+            "Termites": "#ffdae2",
+            "Wildfires": "#ffdae2",
+            "WildAnimals": "#ffdae2",
+            "GeologicalSources": "#ffdae2",
+            "PermafrostAndHydrates": "#ffdae2",        
+            "Freshwater": "#ffdae2",
             "fakeSource": "#67a9cf"
           };
 
@@ -227,15 +223,11 @@
           var minFile, maxFile;
 
           if (chart_div === "#chart_BU") {
-            // minFile = "data/Sankey_BU_2003-2012_25MAy2016_min.json";
-            // maxFile = "data/Sankey_BU_2003-2012_25MAy2016_max.json";
             minFile = "data/Sankey_BU_2003-2012_10june2016_min_3levels.json";
             maxFile = "data/Sankey_BU_2003-2012_10june2016_max_3levels.json";
           } else {
             minFile = "data/Sankey_TD_2003-2012_10june2016_min.json";
             maxFile = "data/Sankey_TD_2003-2012_10june2016_max.json";
-            // minFile = "data/Sankey_TD_2003-2012_25MAy2016_min.json";
-            // maxFile = "data/Sankey_TD_2003-2012_25MAy2016_max.json";
           }
 
           // load the data
@@ -358,17 +350,7 @@
                     .style("top", (d3.event.pageY - yshift_tooltip) + "px");
                 }
               })
-              .on("mouseout", function(d) {
-                // //Only display subsource nodes and links belonging to current node
-                // console.log("link mouseout this: ", d3.select(this))
-                // var this_source = reverse_name_dict[d3.select(this).text()];                
-                // d3.selectAll(".link-subsources:not(.belongsTo-" + this_source + ")")
-                //   .style("display", "none");
-                // d3.selectAll(".node.sub-sources:not(.belongsTo-" + this_source + ")")
-                //   .style("display", "none");
-
-                // d3.selectAll(".sub-sources").style("display", "none");
-                // d3.selectAll(".link-subsources").style("display", "none");
+              .on("mouseout", function(d) {   
 
                 //Restore opacity
                 d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 1)
@@ -389,8 +371,7 @@
             // add in the nodes
             var node = svg.append("g").selectAll(".node")
               .data(graph.nodes)
-              .enter().append("g")
-              //.attr("class", "node")
+              .enter().append("g")              
               .attr("class", function(d) {
                 if (categories.indexOf(d.name) != -1) return "node class-sources";
                 else if (subCategories.indexOf(d.name) != -1) {
@@ -520,14 +501,6 @@
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
-                // console.log("in node mouseout!!!!")
-                // //hide all sub-sources and their links except for current category
-                // console.log("node mouseout this: ", d3.select(this))
-                // var this_source = reverse_name_dict[d3.select(this).text()];
-                // console.log("node mouseout this_source: ", this_source)
-                // d3.selectAll(".link-subsources:not(.belongsTo-" + this_source + ")")
-                //   .style("display", "none");
-                // d3.select(this).style("display", "inline")  
 
                 d3.selectAll(".clicked").classed("clicked", false);
                 d3.selectAll(".link").style("stroke-opacity", 0.5);
