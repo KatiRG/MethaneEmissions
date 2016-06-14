@@ -360,6 +360,17 @@
                 }
               })
               .on("mouseout", function(d) {
+                // //Only display subsource nodes and links belonging to current node
+                // console.log("link mouseout this: ", d3.select(this))
+                // var this_source = reverse_name_dict[d3.select(this).text()];                
+                // d3.selectAll(".link-subsources:not(.belongsTo-" + this_source + ")")
+                //   .style("display", "none");
+                // d3.selectAll(".node.sub-sources:not(.belongsTo-" + this_source + ")")
+                //   .style("display", "none");
+
+                // d3.selectAll(".sub-sources").style("display", "none");
+                // d3.selectAll(".link-subsources").style("display", "none");
+
                 //Restore opacity
                 d3.selectAll(".link:not(#" + this.id + ")").style("opacity", 1)
                 d3.select("#link-fake").style("opacity", 0);
@@ -431,18 +442,24 @@
                 }
               });
 
-            // add the node tooltip
-            node.on("mouseover", function(d) {
+              // add the node tooltip
+              node.on("mouseover", function(d) {  
 
-              if (d3.select(this).attr("class") === "node class-sources") {
+                if (d3.select(this).attr("class") === "node class-sources") {
+                  //Only display subsource nodes and links belonging to current node
+                  var this_source = reverse_name_dict[d3.select(this).text()];
+                  d3.selectAll(".link-subsources:not(.belongsTo-" + this_source + ")")
+                    .style("display", "none");
+                  d3.selectAll(".node.sub-sources:not(.belongsTo-" + this_source + ")")
+                    .style("display", "none");
 
-                //Retrieve mean, min, max
-                var gloStat = getGlobalStat(sourceStats, d);
+                  //Retrieve mean, min, max
+                  var gloStat = getGlobalStat(sourceStats, d);
 
-                if (chart_div === "#chart_BU") {
-                  //show all sub-sources and their links belonging to source
-                  d3.selectAll(".belongsTo-" + reverse_name_dict[d3.select(this).text()])
-                    .style("display", "inline");
+                  if (chart_div === "#chart_BU") {
+                    //show all sub-sources and their links belonging to source
+                    d3.selectAll(".belongsTo-" + reverse_name_dict[d3.select(this).text()])
+                      .style("display", "inline");
                 }
             
                   //Tooltip
@@ -504,10 +521,14 @@
               })
               .on("mouseenter", highlight_node_links)
               .on("mouseout", function(d) {
-
-                //hide all sub-sources and their links
-                d3.selectAll(".sub-sources").style("display", "none");
-                d3.selectAll(".link-subsources").style("display", "none");
+                // console.log("in node mouseout!!!!")
+                // //hide all sub-sources and their links except for current category
+                // console.log("node mouseout this: ", d3.select(this))
+                // var this_source = reverse_name_dict[d3.select(this).text()];
+                // console.log("node mouseout this_source: ", this_source)
+                // d3.selectAll(".link-subsources:not(.belongsTo-" + this_source + ")")
+                //   .style("display", "none");
+                // d3.select(this).style("display", "inline")  
 
                 d3.selectAll(".clicked").classed("clicked", false);
                 d3.selectAll(".link").style("stroke-opacity", 0.5);
@@ -741,7 +762,8 @@
           }
 
           //Modified from http://bl.ocks.org/git-ashish/8959771
-          function highlight_node_links(node, i) {            
+          function highlight_node_links(node, i) {
+
             if (node.name != "fakeSource") {
 
               var remainingNodes = [],
