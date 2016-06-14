@@ -308,12 +308,6 @@
                 if (d.source.name === "fakeSource") return 0;
                 else return 1;
               })
-              // .style("display", function (d) {
-              //   console.log("d: ", d)
-              //   // if (subCategories.indexOf(d.name) != -1) {
-              //   //   d3.selectAll(".link-subsources").style("display", "none");
-              //   // }
-              // })
               .style("cursor", function (d) {
                 if (d.source.name === "fakeSource") {
                   return "auto";
@@ -331,6 +325,11 @@
 
             // add the link tooltip
             link.on("mouseover", function(d) {
+              //Remove display of sub-source nodes and links if hovering over plain link
+              if (d3.select(this).attr("class") === "link") {
+                d3.selectAll(".link-subsources").style("display", "none");
+                d3.selectAll(".node.sub-sources").style("display", "none");
+              }
 
                 var minValue = getStat(minStat, d),
                   maxValue = getStat(maxStat, d);
