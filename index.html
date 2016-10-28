@@ -12,24 +12,9 @@
 <title>Methane Budget</title>
 
 <body>
-  <div id="wrap">
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          <a class="navbar-brand">Methane Budget</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Begin page content -->
-    <div class="container">
+   
 
       <div id="infotext"></div>        
 
@@ -144,7 +129,7 @@
 
           //Position BU Sankey beside TD Sankey
           $('#chart_BU svg').css({
-            top: 120,
+            top: 60,
             left: 700,
             position: 'absolute'
           });
@@ -570,8 +555,9 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX) + "px")
-                      .style("top", (d3.event.pageY - yshift_tooltip) + "px");
+                      .style("left", (d3.event.pageX - 220) + "px")
+                      .style("top", (d3.event.pageY - yshift_tooltip + 50) + "px");
+
                   }
 
                   else if (d.name != "fakeSource") {
@@ -596,8 +582,8 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX) + "px")
-                      .style("top", (d3.event.pageY - yshift_tooltip) + "px");
+                      .style("left", (d3.event.pageX - 250) + "px")
+                      .style("top", (d3.event.pageY - yshift_tooltip - 10) + "px");
                   }
                 } 
 
@@ -890,15 +876,6 @@
         } // end fn make(graph)
       </script>
 
-    </div><!-- /.container -->
-  </div><!-- /.wrap -->
-
-  <div id="footer">
-    <div class="container">
-      <p class="text-muted credit">Created by <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp;<a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> and hosted by <a target="_blank" href="http://www.ipsl.fr/en"><span title="Institut Pierre Simon Laplace" style="font-weight:bold;">IPSL</span></a>&nbsp;<a target="_blank" href="http://www.ipsl.fr/en"><img src="img/IPSL_logo.png" title="Institut Pierre Simon Laplace"/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version 1.0 - 2016/06/15</p>
-
-    </div>
-  </div>
 
 </body>
 
