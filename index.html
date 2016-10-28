@@ -109,8 +109,8 @@
             left: 10
           };
 
-          var width = 670 - margin.left - margin.right,
-            height = 700 - margin.top - margin.bottom;
+          var width = 470 - margin.left - margin.right,
+            height = 660 - margin.top - margin.bottom;
 
           var formatNumber = d3.format(".0f"), //d3.format(".2f"),
             format = function(d) {
@@ -357,6 +357,9 @@
                 d3.select("#link-fake").style("opacity", 0);
                 
                 if (d.source.name != "fakeSource") {
+                  if (chart_div === "#chart_BU") xshift = 250;
+                  else xshift = 0;
+
                   //Tooltip
                   div.transition()
                     .style("opacity", .9);
@@ -370,7 +373,7 @@
                       "</tr>" +
                     "</table>"
                     )
-                    .style("left", (d3.event.pageX) + "px")
+                    .style("left", (d3.event.pageX - xshift) + "px")
                     .style("top", (d3.event.pageY - yshift_tooltip) + "px");
                 }
               })
@@ -542,6 +545,8 @@
                 else {//node regions
                   //regional stats
                   var regStat = getGlobalStat(regionStats, d);
+                  if (chart_div === "#chart_BU") xshift = 250;
+                  else xshift = 0;
 
                   if (d.name === "Not affected") {
                     div.transition()
@@ -555,7 +560,7 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX - 220) + "px")
+                      .style("left", (d3.event.pageX - xshift) + "px")
                       .style("top", (d3.event.pageY - yshift_tooltip + 50) + "px");
 
                   }
@@ -582,7 +587,7 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX - 250) + "px")
+                      .style("left", (d3.event.pageX - xshift) + "px")
                       .style("top", (d3.event.pageY - yshift_tooltip - 10) + "px");
                   }
                 } 
