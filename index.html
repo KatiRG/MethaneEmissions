@@ -130,7 +130,7 @@
           //Position BU Sankey beside TD Sankey
           $('#chart_BU svg').css({
             top: 60,
-            left: 700,
+            left: 465,
             position: 'absolute'
           });
 
@@ -682,8 +682,9 @@
 
 
               //Translate sources
+              console.log("w: ", width)
               if (chart_div === "#chart_TD") deltaX = 0;
-              else deltaX = 215;
+              else deltaX = 125; //215;
               translateNode(chart_div,"g.node.class-sources", deltaX, displacement_dict);
 
               //Translate sub-sources
