@@ -3,18 +3,19 @@
 
 <script src="lib/d3.v3.min.js"></script>
 <script src="lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery.class.js"></script>
 <!--bootstrap 3.0.2 -->
 <link href="lib/bootstrap.css" rel="stylesheet">
 <script src="lib/bootstrap.min.js"></script>
 <link href="sticky-footer-navbar.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="lib/Help.js"></script>
 
 <title>Methane Budget</title>
 
 <body>
 
     <!-- Begin page content -->
-   
 
       <div id="infotext"></div>
 
@@ -29,13 +30,38 @@
         <div id="title_TD">Top-Down budget (2003&ndash;2012)</div>
         <div id="subtitle_TD">Global sources: 558 [540&ndash;568] Tg CH4 yr<sup>-1</sup></div>
       </p>
+      <p><div id="div_logo">
+        <a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp; <span style="font-weight:normal;">Open in
+        <a target="_blank" href="http://lsce-datavisgroup.github.io/MethaneBudget/">original link</a></span>
+      </div></p>
+
       <p id="chart_BU">
        <div id="title_BU">Bottom-Up budget (2003&ndash;2012)</div>
        <div id="subtitle_BU">Global sources: 736 [596&ndash;884] Tg CH4 yr<sup>-1</sup></div>
      </p>
 
+      <div class="navbar-header">
+        <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
+      </div>
+
       <script src="sankey.js"></script>
       <script>
+
+        $( "#buttonHelp" ).on( "click", function()
+        {
+            createHelp();
+        } );
+
+        function createHelp()
+        {
+          var parameters = new Object();
+
+          parameters.helpArray = [ 
+            {linkType:"simple", divToHelpId:"menu1", text:"Help for menu1", marginTop:15}
+          ];
+
+          new Help( parameters );
+        }
 
         $(window).resize(function(event){
              var size = $('#breakpoints div:visible').first().data('size');
