@@ -123,3 +123,21 @@
     padding: 2px;
     text-align: left;
   }
+
+  #breakpoints {
+    height:0px;
+
+    div {
+        width:1px;
+        height:0px;
+        visibility:hidden;
+
+        &.breakpoint-small {
+            display:block;
+        }
+        &.breakpoint-medium,
+        &.breakpoint-large {
+            display:none;
+        }
+    }
+}

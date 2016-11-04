@@ -16,7 +16,14 @@
     <!-- Begin page content -->
    
 
-      <div id="infotext"></div>        
+      <div id="infotext"></div>
+
+      <!-- http://foundation.zurb.com/forum/posts/990-determine-screen-size-media-query-using-javascript -->
+      <div id="breakpoints"> 
+        <div class="breakpoint-small" data-size="small"></div>
+        <div class="breakpoint-medium" data-size="medium"></div>
+        <div class="breakpoint-large" data-size="large"></div>
+      </div>
 
       <p id="chart_TD">
         <div id="title_TD">Top-Down budget (2003&ndash;2012)</div>
@@ -29,6 +36,12 @@
 
       <script src="sankey.js"></script>
       <script>
+
+        $(window).resize(function(event){
+             var size = $('#breakpoints div:visible').first().data('size');
+             console.log("size: ", size)
+             //do something with your size
+        }); 
         // Sankey diagram with highlight and tooltip
         // http://bost.ocks.org/mike/sankey/
         // http://bl.ocks.org/git-ashish/8959771
