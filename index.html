@@ -40,6 +40,8 @@
        <div id="subtitle_BU">Global sources: 736 [596&ndash;884] Tg CH4 yr<sup>-1</sup></div>
      </p>
 
+     <div id="info_agree"></div>
+
       <div class="navbar-header">
         <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
       </div>
@@ -52,12 +54,21 @@
             createHelp();
         } );
 
+        var junk = "<table>" +
+          "<tr>" + 
+              "<td>" + "mean: " + "</td>" +
+              "<td>" + "next line" + "</td>" +
+          "</tr>" +
+        "</table>";
+
         function createHelp()
         {
           var parameters = new Object();
 
           parameters.helpArray = [ 
-            {linkType:"simple", divToHelpId:"menu1", text:"Help for menu1", marginTop:15}
+            {linkType:"right", divToHelpId:"title_TD", text:"based on energy & agricultural data and ground observations", marginTop:20},
+            {linkType:"right", divToHelpId:"title_BU", text:"based on measured atmospheric CH4 concentrations and inversion models", marginTop:20},
+            {linkType:"right", divToHelpId:"info_agree", text:"There is good consistency between TD and BU approaches in the partition of anthropogenic emissions between Agriculture & Waste, Fossil fuel production, and Biofuel & Biomass burning.", marginTop:10, marginLeft:10}
           ];
 
           new Help( parameters );

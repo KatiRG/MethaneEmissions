@@ -99,7 +99,7 @@
 
   #title_BU {
     position: relative;
-    top: -678px;
+    top: -709px;
     left: 649px;
     font-size: 14px;
     font-weight: bold;
@@ -108,7 +108,7 @@
 
   #subtitle_BU {
     position: relative;
-    top: -677px;
+    top: -708px;
     left: 610px;
     font-size: 14px;
     font-weight: bold;
@@ -154,3 +154,9 @@
 #buttonHelp {
   margin: -330px 0 0 30px;
 }
+
+ #info_agree {
+    position: relative;
+    top: -600px;
+    left: 490px;
+  }
