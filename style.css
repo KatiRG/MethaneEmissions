@@ -152,7 +152,9 @@
 }
 
 #buttonHelp {
-  margin: -330px 0 0 30px;
+  margin: -160px 0 0 30px;
+  position: absolute;
+  z-index: 200;
 }
 
  #info_agree {
