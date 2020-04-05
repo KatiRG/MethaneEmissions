@@ -3,47 +3,82 @@
 
 <script src="lib/d3.v3.min.js"></script>
 <script src="lib/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery.class.js"></script>
 <!--bootstrap 3.0.2 -->
 <link href="lib/bootstrap.css" rel="stylesheet">
 <script src="lib/bootstrap.min.js"></script>
 <link href="sticky-footer-navbar.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="lib/Help.js"></script>
 
 <title>Methane Budget</title>
 
 <body>
-  <div id="wrap">
-
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-          <a class="navbar-brand">Methane Budget</a>
-        </div>
-      </div>
-    </div>
 
     <!-- Begin page content -->
-    <div class="container">
 
-      <div id="infotext"></div>        
+      <div id="infotext"></div>
+
+      <!-- http://foundation.zurb.com/forum/posts/990-determine-screen-size-media-query-using-javascript -->
+      <div id="breakpoints"> 
+        <div class="breakpoint-small" data-size="small"></div>
+        <div class="breakpoint-medium" data-size="medium"></div>
+        <div class="breakpoint-large" data-size="large"></div>
+      </div>
 
       <p id="chart_TD">
         <div id="title_TD">Top-Down budget (2003&ndash;2012)</div>
         <div id="subtitle_TD">Global sources: 558 [540&ndash;568] Tg CH4 yr<sup>-1</sup></div>
       </p>
+      <p><div id="div_logo">
+        <a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp; <span style="font-weight:normal;">Open in
+        <a target="_blank" href="http://lsce-datavisgroup.github.io/MethaneBudget/">original link</a></span>
+      </div></p>
+
       <p id="chart_BU">
        <div id="title_BU">Bottom-Up budget (2003&ndash;2012)</div>
        <div id="subtitle_BU">Global sources: 736 [596&ndash;884] Tg CH4 yr<sup>-1</sup></div>
      </p>
 
+     <div id="info_agree"></div>
+
+      <div class="navbar-header">
+        <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
+      </div>
+
       <script src="sankey.js"></script>
       <script>
+
+        $( "#buttonHelp" ).on( "click", function()
+        {
+            createHelp();
+        } );
+
+        var junk = "<table>" +
+          "<tr>" + 
+              "<td>" + "mean: " + "</td>" +
+              "<td>" + "next line" + "</td>" +
+          "</tr>" +
+        "</table>";
+
+        function createHelp()
+        {
+          var parameters = new Object();
+
+          parameters.helpArray = [ 
+            {linkType:"dotOnly", divToHelpId:"title_TD", text:"Top-Down: based on energy & agricultural data and ground observations", marginTop:20, marginLeft:-380},
+            {linkType:"dotOnly", divToHelpId:"title_BU", text:"based on measured atmospheric CH4 concentrations and inversion models", marginTop:20, marginLeft:-300},
+            {linkType:"right", divToHelpId:"info_agree", text:"There is good consistency between TD and BU approaches in the partition of anthropogenic emissions between Agriculture & Waste, Fossil fuel production, and Biofuel & Biomass burning.", marginTop:10, marginLeft:10, textLengthByLine:40}
+          ];
+
+          new Help( parameters );
+        }
+
+        $(window).resize(function(event){
+             var size = $('#breakpoints div:visible').first().data('size');
+             console.log("size: ", size)
+             //do something with your size
+        }); 
         // Sankey diagram with highlight and tooltip
         // http://bost.ocks.org/mike/sankey/
         // http://bl.ocks.org/git-ashish/8959771
@@ -124,8 +159,8 @@
             left: 10
           };
 
-          var width = 670 - margin.left - margin.right,
-            height = 700 - margin.top - margin.bottom;
+          var width = 470 - margin.left - margin.right,
+            height = 660 - margin.top - margin.bottom;
 
           var formatNumber = d3.format(".0f"), //d3.format(".2f"),
             format = function(d) {
@@ -144,8 +179,8 @@
 
           //Position BU Sankey beside TD Sankey
           $('#chart_BU svg').css({
-            top: 120,
-            left: 700,
+            top: 60,
+            left: 465,
             position: 'absolute'
           });
 
@@ -372,6 +407,9 @@
                 d3.select("#link-fake").style("opacity", 0);
                 
                 if (d.source.name != "fakeSource") {
+                  if (chart_div === "#chart_BU") xshift = 250;
+                  else xshift = 0;
+
                   //Tooltip
                   div.transition()
                     .style("opacity", .9);
@@ -385,7 +423,7 @@
                       "</tr>" +
                     "</table>"
                     )
-                    .style("left", (d3.event.pageX) + "px")
+                    .style("left", (d3.event.pageX - xshift) + "px")
                     .style("top", (d3.event.pageY - yshift_tooltip) + "px");
                 }
               })
@@ -557,6 +595,8 @@
                 else {//node regions
                   //regional stats
                   var regStat = getGlobalStat(regionStats, d);
+                  if (chart_div === "#chart_BU") xshift = 250;
+                  else xshift = 0;
 
                   if (d.name === "Not affected") {
                     div.transition()
@@ -570,8 +610,9 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX) + "px")
-                      .style("top", (d3.event.pageY - yshift_tooltip) + "px");
+                      .style("left", (d3.event.pageX - xshift) + "px")
+                      .style("top", (d3.event.pageY - yshift_tooltip + 50) + "px");
+
                   }
 
                   else if (d.name != "fakeSource") {
@@ -596,8 +637,8 @@
                         "</tr>" +
                       "</table>"
                       )
-                      .style("left", (d3.event.pageX) + "px")
-                      .style("top", (d3.event.pageY - yshift_tooltip) + "px");
+                      .style("left", (d3.event.pageX - xshift) + "px")
+                      .style("top", (d3.event.pageY - yshift_tooltip - 10) + "px");
                   }
                 } 
 
@@ -691,8 +732,9 @@
 
 
               //Translate sources
+              console.log("w: ", width)
               if (chart_div === "#chart_TD") deltaX = 0;
-              else deltaX = 215;
+              else deltaX = 125; //215;
               translateNode(chart_div,"g.node.class-sources", deltaX, displacement_dict);
 
               //Translate sub-sources
@@ -890,15 +932,6 @@
         } // end fn make(graph)
       </script>
 
-    </div><!-- /.container -->
-  </div><!-- /.wrap -->
-
-  <div id="footer">
-    <div class="container">
-      <p class="text-muted credit">Created by <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp;<a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> and hosted by <a target="_blank" href="http://www.ipsl.fr/en"><span title="Institut Pierre Simon Laplace" style="font-weight:bold;">IPSL</span></a>&nbsp;<a target="_blank" href="http://www.ipsl.fr/en"><img src="img/IPSL_logo.png" title="Institut Pierre Simon Laplace"/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Version 1.0 - 2016/06/15</p>
-
-    </div>
-  </div>
 
 </body>
 
