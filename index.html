@@ -692,6 +692,8 @@
               var sub_displacement_dict = {
                 "Coal": 0,
                 "GasAndOilIndustry": 29,
+                "Industry":35,
+                "Transport":40,
                 "EntericFermentationAndManure": 96,
                 "LandfillsAndWaste": 164,
                 "Rice": 203,
@@ -701,8 +703,8 @@
                 "GeologicalSources": 454,
                 "Termites": 495,
                 "WildAnimals": 510,
-                "Wildfires": 526,
-                "PermafrostAndHydrates": 538,
+                "BiogenicOceanic": 526,
+                "Permafrost": 538,
                 "fakeSource": 300
               };
               var link = d3.selectAll("path.link");
@@ -786,27 +788,27 @@
               ynames[ynames.length] = "Not affected";
 
               //Store heights of BU rects in dict
-              var yheightBU_dict = {
-                "Europe": 0,
-                "China": 0,
-                "India": 0,
-                "Temp_Eurasia_Japan": 0,
-                "contUSA": 0,
-                "Cent_NAme": 0,
-                "Oceania": 0,
-                "Temp_SAme": 0,
-                "SE_Asia": 0,
-                "NAfr": 0,
-                "Russia": 0,
-                "Trop_SAme": 0,
-                "SAfr": 0,
-                "Bor_NAme": 0,
-                "Not affected": 0
-              };
-              d3.select("#chart_BU").selectAll(".regions")
-                .each(function(d, idx) {
-                  yheightBU_dict[d.name] = d.dy;
-                });
+              // var yheightBU_dict = {
+              //   "Europe": 0,
+              //   "China": 0,
+              //   "India": 0,
+              //   "Temp_Eurasia_Japan": 0,
+              //   "contUSA": 0,
+              //   "Cent_NAme": 0,
+              //   "Oceania": 0,
+              //   "Temp_SAme": 0,
+              //   "SE_Asia": 0,
+              //   "NAfr": 0,
+              //   "Russia": 0,
+              //   "Trop_SAme": 0,
+              //   "SAfr": 0,
+              //   "Bor_NAme": 0,
+              //   "Not affected": 0
+              // };
+              // d3.select("#chart_BU").selectAll(".regions")
+              //   .each(function(d, idx) {
+              //     yheightBU_dict[d.name] = d.dy;
+              //   });
 
               //Calculate new y-coords of TD rects.
               yval[0] = 0;
