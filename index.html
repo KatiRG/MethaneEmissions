@@ -75,7 +75,7 @@
         }
 
         $(window).resize(function(event){
-             var size = $('#breakpoints div:visible').first().data('size');
+             var size = $("#breakpoints div:visible").first().data("size");
              console.log("size: ", size)
              //do something with your size
         }); 
@@ -87,17 +87,17 @@
         // Table 3 of preprint https://www.earth-syst-sci-data-discuss.net/essd-2019-128/
         var TD_sourceStats =   [
           {sourceName:"Fossil", mean: 109, min:79, max:168},
-          {sourceName:"Agriwast", mean: 219, min:175, max:239},
+          {sourceName:"AgriWaste", mean: 219, min:175, max:239},
           {sourceName:"BioBurBiof", mean: 30, min:22, max:36},
           {sourceName:"Wetlands", mean:178, min:155, max:200},
-          {sourceName:"OtherNat", mean: 37, min:21, max:50}
+          {sourceName:"OtherNatural", mean: 37, min:21, max:50}
           ];
         var BU_sourceStats = [
           {sourceName:"Fossil", mean: 127, min:111, max:154},
-          {sourceName:"Agriwast", mean:206, min:191, max:223},
+          {sourceName:"AgriWaste", mean:206, min:191, max:223},
           {sourceName:"BioBurBiof", mean: 30, min:26, max:40},
           {sourceName:"Wetlands", mean:149, min:102, max:182},
-          {sourceName:"OtherNat", mean: 222, min:143, max:306}
+          {sourceName:"OtherNatural", mean: 222, min:143, max:306}
           ];
 
         // Regional stats. From sumSources in text files (see notebooks)
@@ -145,10 +145,10 @@
               "translate(" + margin.left + "," + margin.top + ")");
 
           //Position BU Sankey beside TD Sankey
-          $('#chart_BU svg').css({
+          $("#chart_BU svg").css({
             top: 60,
             left: 465,
-            position: 'absolute'
+            position: "absolute"
           });
 
           // set the sankey diagram properties
@@ -163,79 +163,89 @@
 
           var units = "Tg CH4 yr <sup>-1</sup>";
 
-
-          //https://www.colorcodehex.com/eff3ff/
           var colour_dict = {
             //regions
-            "Bor_NAme": "#C399D9",
-            "contUSA": "#A6D4FF",
-            "Cent_NAme": "#9ecae1",
-            "Trop_SAme": "#65dfd1",
-            "Temp_SAme": "#EA2B0D",
-            "NAfr": "#ffd880",
-            "SAfr": "#989F60",
+            "Canada": "#C399D9",
+            "USA": "#A6D4FF",
+            "Central_America": "#9ecae1",
+            "Southwest_South_America": "#65dfd1",
+            "Northern_South_America": "#EA2B0D",
+            "Northern_Africa": "#ffd880",
+            "Southern_Africa": "#989F60",
             "Russia": "#EACE75",
             "Oceania": "#AAA993",
             "Europe": "#FCAA70",
             "China": "#7FA0FF",
-            "India": "#dd1c77",
-            "SE_Asia": "#ff80af",
-            "Temp_Eurasia_Japan": "#e0e67f",
+            "South_Asia": "#dd1c77",
+            "Southeast_Asia": "#ff80af",
+            "Korean_Japan": "#e0e67f",
+            "Brazil":"#33a02c",
+            "Equatorial_Africa":"#386cb0",
+            "Central_Asia":"#a6611a",
+            "Middle_East":"#018571",
             "Not affected": "#b8b0e6",
             //sources
-            "Agriwast": "#87f4ff",
+            "AgriWaste": "#87f4ff",
             "BioBurBiof": "#ee3b3b",
             "Fossil": "#d3d3d3",
-            "OtherNat": "#ffb5c5",
+            "OtherNatural": "#ffb5c5",
             "Wetlands": "#b0df65",
             //sub-categories
             "Coal": "#e9e9e9",
             "GasAndOilIndustry": "#e9e9e9",
+            "Industry":"#e9e9e9",
+            "Transport":"#e9e9e9",
             "EntericFermentationAndManure": "#aef8ff",
             "LandfillsAndWaste": "#aef8ff",
             "Rice": "#aef8ff",
             "BiofuelBurning": "#f37575",
             "BiomassBurning": "#f37575",
             "Termites": "#ffdae2",
-            "Wildfires": "#ffdae2",
+            "BiogenicOceanic": "#ffdae2",
             "WildAnimals": "#ffdae2",
             "GeologicalSources": "#ffdae2",
-            "PermafrostAndHydrates": "#ffdae2",        
+            "Permafrost": "#ffdae2",        
             "Freshwater": "#ffdae2",
             "fakeSource": "#67a9cf"
           };
 
           var name_dict = {
             //regions
-            "Bor_NAme": "Boreal North America",
-            "contUSA": "continuous USA",
-            "Cent_NAme": "Central North America",
-            "Trop_SAme": "Tropical South America",
-            "Temp_SAme": "Temperate South America",
-            "NAfr": "Northern Africa",
-            "SAfr": "Southern Africa",
+            "Canada": "Canada",
+            "USA": "USA",
+            "Central_America": "Central America",
+            "Southwest_South_America": "Southwest South America",
+            "Northern_South_America": "Northern South America",
+            "Northern_Africa": "Northern Africa",
+            "Southern_Africa": "Southern Africa",
             "Russia": "Russia",
             "Oceania": "Oceania",
             "Europe": "Europe",
             "China": "China",
-            "India": "India",
-            "SE_Asia": "South East Asia",
-            "Temp_Eurasia_Japan": "Central Eurasia & Japan",
+            "South_Asia": "South Asia",
+            "Southeast_Asia": "Southeast Asia",
+            "Korean_Japan": "Korea & Japan",
+            "Brazil":"Brazil",
+            "Equatorial_Africa":"Equatorial Africa",
+            "Central_Asia":"Central Asia",
+            "Middle_East":"Middle East",
             "Not affected": "Not (yet) spatially distributed",
             //sources
-            "Agriwast": "Agriculture & Waste",
+            "AgriWaste": "Agriculture & Waste",
             "BioBurBiof": "Biofuel & Biomass burning",
             "Fossil": "Fossil fuel production & use",
-            "OtherNat": "Other Natural",
+            "OtherNatural": "Other Natural",
             "Wetlands": "Wetlands",
             //sub-categories
+            "Industry":"Industry",
+            "Transport":"Transport",
             "Termites": "Termites",
-            "Wildfires": "Wildfires",
+            "BiogenicOceanic": "Biogenic Oceanic",
             "WildAnimals": "Wild Animals",
             "EntericFermentationAndManure": "Ruminants",
             "LandfillsAndWaste": "Waste",
             "GeologicalSources": "Geological",
-            "PermafrostAndHydrates": "Hydrates",
+            "Permafrost": "Permafrost",
             "Rice": "Rice",
             "Coal": "Coal",
             "GasAndOilIndustry": "Gas/Oil",
@@ -246,20 +256,20 @@
           };
 
           var reverse_name_dict = {
-            "Agriculture & Waste": "Agriwast",
+            "Agriculture & Waste": "AgriWaste",
             "Biofuel & Biomass burning": "BioBurBiof",
             "Fossil fuel production & use": "Fossil",
-            "Other Natural": "OtherNat",
+            "Other Natural": "OtherNatural",
             "Wetlands": "Wetlands"
           };
 
           //class labels for category  nodes only
-          var categories = ["Agriwast", "OtherNat", "BioBurBiof", "Wetlands", "Fossil"];
+          var categories = ["AgriWaste", "OtherNatural", "BioBurBiof", "Wetlands", "Fossil"];
           //class labels for sub-category  nodes only
-          var subCategories = ["Termites", "Wildfires", "WildAnimals", "EntericFermentationAndManure", 
-              "LandfillsAndWaste", "GeologicalSources", "PermafrostAndHydrates", "Rice", 
-              "Coal", "GasAndOilIndustry", "BiofuelBurning", "BiomassBurning", "Freshwater", 
-              "fakeSource"];
+          var subCategories = ["WildAnimals", "Freshwater", "GeologicalSources", "Transport", 
+                              "LandfillsAndWaste", "BiomassBurning", "Permafrost", "GasAndOilIndustry",
+                              "BiogenicOceanic", "Rice", "Termites", "Industry", "BiofuelBurning", "Coal", 
+                              "EntericFermentationAndManure", "fakeSource"];
 
           var minFile, maxFile;
 
@@ -672,8 +682,8 @@
             function manualLayout() {
               //For sources only
               var displacement_dict = {
-                "Agriwast": 103,
-                "OtherNat": 428,
+                "AgriWaste": 103,
+                "OtherNatural": 428,
                 "BioBurBiof": 245,
                 "Wetlands": 291,
                 "Fossil": 0
@@ -840,7 +850,7 @@
           function uniques(arr) {
             var a = [];
             for (var i = 0, l = arr.length; i < l; i++)
-              if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
+              if (a.indexOf(arr[i]) === -1 && arr[i] !== ")
                 a.push(arr[i]);
             return a;
           }
