@@ -107,12 +107,12 @@
 
         //Top-down Sankey
         var chart_div1 = "#chart_TD",
-          jsonFile1 = "data/Sankey_TD_2003-2012_10june2016_mean_noZeros.json";
+          jsonFile1 = "data/Sankey_TD_2008-2017_31mar2020_mean_noZeros.json";
         makeSankey(chart_div1, jsonFile1, TD_sourceStats, TD_regionStats);  
 
         //Bottum-up Sankey
         var chart_div2 = "#chart_BU",
-          jsonFile2 = "data/Sankey_BU_2003-2012_10june2016_mean_3levels.json";
+          jsonFile2 = "data/Sankey_BU_2008-2017_31mar2020_mean_3levels.json";
         makeSankey(chart_div2, jsonFile2, BU_sourceStats, BU_regionStats);
 
         var minStat, maxStat; //objects to store min and max statistics
@@ -274,11 +274,11 @@
           var minFile, maxFile;
 
           if (chart_div === "#chart_BU") {
-            minFile = "data/Sankey_BU_2003-2012_10june2016_min_3levels.json";
-            maxFile = "data/Sankey_BU_2003-2012_10june2016_max_3levels.json";
+            minFile = "data/Sankey_BU_2008-2017_31mar2020_min_3levels.json";
+            maxFile = "data/Sankey_BU_2008-2017_31mar2020_max_3levels.json";
           } else {
-            minFile = "data/Sankey_TD_2003-2012_10june2016_min.json";
-            maxFile = "data/Sankey_TD_2003-2012_10june2016_max.json";
+            minFile = "data/Sankey_TD_2008-2017_31mar2020_min_noZeros.json";
+            maxFile = "data/Sankey_TD_2008-2017_31mar2020_max_noZeros.json";
           }
 
           // load the data
@@ -850,7 +850,7 @@
           function uniques(arr) {
             var a = [];
             for (var i = 0, l = arr.length; i < l; i++)
-              if (a.indexOf(arr[i]) === -1 && arr[i] !== ")
+              if (a.indexOf(arr[i]) === -1 && arr[i] !== "")
                 a.push(arr[i]);
             return a;
           }
