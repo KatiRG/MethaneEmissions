@@ -17,7 +17,6 @@ function createHelp() {
 
 $(window).resize(function(event){
      var size = $("#breakpoints div:visible").first().data("size");
-     console.log("size: ", size)
      //do something with your size
 }); 
 // Sankey diagram with highlight and tooltip
@@ -438,6 +437,7 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
           }
     
           if (chart_div === "#chart_BU" && name_dict[d.name] === "Wetlands") {
+            console.log(d)
             //Tooltip
             div.transition()
               .style("opacity", .9);
