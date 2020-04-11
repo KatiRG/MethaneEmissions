@@ -27,6 +27,9 @@ text, .container {
   pointer-events: none;
   fill: #555;
 }
+.class-sources text {
+  font-weight: bold;
+}
 
 .link {
   fill: none;

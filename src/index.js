@@ -315,7 +315,7 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
     d3.selectAll(".link-subsources").style("display", "none");
 
     // add the link tooltip
-    link.on("mouseover", function(d) {
+    link.on("mousemove", function(d) {
       //Remove display of sub-source nodes and links if hovering over plain link
       if (d3.select(this).attr("class") === "link") {
         d3.selectAll(".link-subsources").style("display", "none");
@@ -425,7 +425,7 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
       });
 
       // add the node tooltip
-      node.on("mouseover", function(d) {
+      node.on("mousemove", function(d) {
 
         if (d3.select(this).attr("class") === "node class-sources") {
           //Only display subsource nodes and links belonging to current node
