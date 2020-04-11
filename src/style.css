@@ -172,11 +172,7 @@ font-weight: bold;
 width: 300px;
 }
 
-#buttonHelp {
-margin: 0px 0 0 30px;
-position: absolute;
-z-index: 200;
-}
+
 
 #info_agree {
   position: relative;
@@ -184,3 +180,19 @@ z-index: 200;
   left: 490px;
   text-align: justify;
 }
+
+#helpButton {
+  position: absolute;
+  margin: 0px 0 0 30px;
+/*  left: 15px;
+  top: 4px;*/
+  background-color: #ffaa1b;
+  border-color: #fff;
+  color: #000;
+  z-index: 200;
+}
+/*#buttonHelp {
+  margin: 0px 0 0 30px;
+  position: absolute;
+  z-index: 200;
+}*/

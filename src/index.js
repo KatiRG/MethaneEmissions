@@ -3,13 +3,6 @@ $( "#buttonHelp" ).on( "click", function()
     createHelp();
 } );
 
-var junk = "<table>" +
-  "<tr>" + 
-      "<td>" + "mean: " + "</td>" +
-      "<td>" + "next line" + "</td>" +
-  "</tr>" +
-"</table>";
-
 function createHelp() {
   var parameters = new Object();
 
@@ -659,7 +652,6 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
 
 
       //Translate sources
-      console.log("w: ", width)
       if (chart_div === "#chart_TD") deltaX = 0;
       else deltaX = 125; //215;
       translateNode(chart_div,"g.node.class-sources", deltaX, displacement_dict);
