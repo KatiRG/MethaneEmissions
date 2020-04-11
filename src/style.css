@@ -18,6 +18,13 @@ text, .container {
   border: 1px solid #fff;
 }
 
+.headings {
+  font-size: 20px;
+  padding-left: 0px;
+  color: #565656;
+  text-align: center;
+}
+
 .node rect {
   fill-opacity: 1.0;
   shape-rendering: crispEdges;
