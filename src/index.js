@@ -68,14 +68,14 @@ var yshift_tooltip = 90; //amount to raise tooltip in y-dirn
 
 function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {          
   var margin = {
-    top: 110,
+    top: 40,
     right: 10,
     bottom: 10,
     left: 10
   };
 
   var width = 470 - margin.left - margin.right,
-    height = 660 - margin.top - margin.bottom;
+    height = 775 - margin.top - margin.bottom;
 
   var formatNumber = d3.format(".0f"), //d3.format(".2f"),
     format = function(d) {
@@ -94,8 +94,8 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
 
   //Position BU Sankey beside TD Sankey
   $("#chart_BU svg").css({
-    top: 60,
-    left: 465,
+    top: 44,
+    left: 0,
     position: "absolute"
   });
 

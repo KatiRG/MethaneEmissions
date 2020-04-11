@@ -3,7 +3,7 @@
   <head>
       <meta charset="utf-8">
       <title id="titletag"></title>
-      <link rel="stylesheet" href="style.css" type="text/css">
+      <link rel="stylesheet" href="src/style.css" type="text/css">
       <!--bootstrap 3.0.2 -->
       <link href="lib/bootstrap.css" rel="stylesheet">
       <link href="sticky-footer-navbar.css" rel="stylesheet">
@@ -13,10 +13,11 @@
 <title>Methane Budget</title>
 
 <body>
-
+  <div class="container">
     <!-- Begin page content -->
-
+    <div class="row">
       <div id="infotext"></div>
+    </div>
 
       <!-- http://foundation.zurb.com/forum/posts/990-determine-screen-size-media-query-using-javascript -->
       <div id="breakpoints"> 
@@ -25,24 +26,23 @@
         <div class="breakpoint-large" data-size="large"></div>
       </div>
 
-      <p id="chart_TD">
-        <div id="title_TD">Top-Down budget (2008&ndash;2017)</div>
-        <div id="subtitle_TD">Global sources: 572 [538&ndash;593] Tg CH4 yr<sup>-1</sup></div>
-      </p>
-      <p><div id="div_logo">
-        <a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp; <span style="font-weight:normal;">Open in
-        <a target="_blank" href="http://lsce-datavisgroup.github.io/MethaneBudget/">original link</a></span>
-      </div></p>
-
-      <p id="chart_BU">
-       <div id="title_BU">Bottom-Up budget (2008&ndash;2017)</div>
-       <div id="subtitle_BU">Global sources: 737 [593&ndash;880] Tg CH4 yr<sup>-1</sup></div>
-     </p>
+      <div class="row">
+        <div class="col-md-6" id="chart_TD">
+          <div id="title_TD" class="title">Top-Down budget (2008&ndash;2017)</div>
+          <div id="subtitle_TD" class="title">Global sources: 572 [538&ndash;593] Tg CH4 yr<sup>-1</sup></div>         
+        </div>
+        <div class="col-md-6" id="chart_BU">
+          <div id="title_BU" class="title">Bottom-Up budget (2008&ndash;2017)</div>
+          <div id="subtitle_BU" class="title">Global sources: 737 [593&ndash;880] Tg CH4 yr<sup>-1</sup></div>
+        </div>
+   </div>
 
      <div id="info_agree"></div>
 
-      <div class="navbar-header">
-        <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
+      <div class="row">
+        <div class="navbar-header">
+          <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
+        </div>
       </div>
 
       <script type="text/javascript" src="lib/d3.v3.min.js"></script>
@@ -52,5 +52,6 @@
       <script type="text/javascript" src="lib/Help.js"></script>      
       <script type="text/javascript" src="lib/sankey.js"></script>
       <script type="text/javascript" src="src/index.js"></script>
+    </div><!-- /.container -->
 </body>
 </html>
