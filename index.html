@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title id="titletag"></title>
+      <link rel="stylesheet" href="style.css" type="text/css">
+      <!--bootstrap 3.0.2 -->
+      <link href="lib/bootstrap.css" rel="stylesheet">
+      <link href="sticky-footer-navbar.css" rel="stylesheet">
+  </head>
 
-<script src="lib/d3.v3.min.js"></script>
-<script src="lib/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="lib/jquery.class.js"></script>
-<!--bootstrap 3.0.2 -->
-<link href="lib/bootstrap.css" rel="stylesheet">
-<script src="lib/bootstrap.min.js"></script>
-<link href="sticky-footer-navbar.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="lib/Help.js"></script>
 
 <title>Methane Budget</title>
 
@@ -27,8 +26,8 @@
       </div>
 
       <p id="chart_TD">
-        <div id="title_TD">Top-Down budget (2003&ndash;2012)</div>
-        <div id="subtitle_TD">Global sources: 558 [540&ndash;568] Tg CH4 yr<sup>-1</sup></div>
+        <div id="title_TD">Top-Down budget (2008&ndash;2017)</div>
+        <div id="subtitle_TD">Global sources: 572 [538&ndash;593] Tg CH4 yr<sup>-1</sup></div>
       </p>
       <p><div id="div_logo">
         <a target="_blank" href="http://www.lsce.ipsl.fr/en"><img src="img/LSCE_Icon.png" title="Climate and Environment Sciences Laboratory"/></a> <a target="_blank" href="http://www.lsce.ipsl.fr/en"><span title="Climate and Environment Sciences Laboratory" style="font-weight:bold;">LSCE</span></a>&nbsp; <span style="font-weight:normal;">Open in
@@ -36,8 +35,8 @@
       </div></p>
 
       <p id="chart_BU">
-       <div id="title_BU">Bottom-Up budget (2003&ndash;2012)</div>
-       <div id="subtitle_BU">Global sources: 736 [596&ndash;884] Tg CH4 yr<sup>-1</sup></div>
+       <div id="title_BU">Bottom-Up budget (2008&ndash;2017)</div>
+       <div id="subtitle_BU">Global sources: 737 [593&ndash;880] Tg CH4 yr<sup>-1</sup></div>
      </p>
 
      <div id="info_agree"></div>
@@ -46,6 +45,11 @@
         <button id="buttonHelp" class="btn btn-info" type="button">Launch Help</button>
       </div>
 
+      <script src="lib/d3.v3.min.js"></script>
+      <script src="lib/jquery-1.10.2.min.js"></script>
+      <script type="text/javascript" src="lib/jquery.class.js"></script>
+      <script src="lib/bootstrap.min.js"></script>      
+      <script type="text/javascript" src="lib/Help.js"></script>
       <script src="sankey.js"></script>
       <script>
 
@@ -789,21 +793,25 @@
 
               //Store heights of BU rects in dict
               var yheightBU_dict = {
-                "Europe": 0,
-                "China": 0,
-                "India": 0,
-                "Temp_Eurasia_Japan": 0,
-                "contUSA": 0,
-                "Cent_NAme": 0,
-                "Oceania": 0,
-                "Temp_SAme": 0,
-                "SE_Asia": 0,
-                "NAfr": 0,
-                "Russia": 0,
-                "Trop_SAme": 0,
-                "SAfr": 0,
-                "Bor_NAme": 0,
-                "Not affected": 0
+                 "Brazil": 0,
+                  "South_Asia": 0,
+                  "Southeast_Asia": 0,
+                  "China": 0,
+                  "USA": 0,
+                  "Equatorial_Africa": 0,
+                  "Russia": 0,
+                  "Europe": 0,
+                  "Northern_Africa": 0,
+                  "Southwest_South_America": 0,
+                  "Middle_East": 0,
+                  "Canada": 0,
+                  "Northern_South_America": 0,
+                  "Southern_Africa": 0,
+                  "Central_America": 0,
+                  "Oceania": 0,
+                  "Central_Asia": 0,
+                  "Korean_Japan": 0,
+                  "Not affected": 0
               };
               d3.select("#chart_BU").selectAll(".regions")
                 .each(function(d, idx) {
@@ -910,8 +918,5 @@
 
         } // end fn make(graph)
       </script>
-
-
 </body>
-
 </html>
