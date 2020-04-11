@@ -630,11 +630,11 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
     function manualLayout() {
       //For sources only
       var displacement_dict = {
-        "AgriWaste": 103,
-        "OtherNatural": 428,
-        "BioBurBiof": 245,
-        "Wetlands": 291,
-        "Fossil": 0
+        "Fossil": 0,
+        "AgriWaste": 124,        
+        "BioBurBiof": 320,
+        "Wetlands": 376,
+        "OtherNatural": 537        
       };
       //For sources only
       var sub_displacement_dict = {
