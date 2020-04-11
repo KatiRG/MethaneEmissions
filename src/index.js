@@ -126,7 +126,7 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
     "China": "#7FA0FF",
     "South_Asia": "#dd1c77",
     "Southeast_Asia": "#ff80af",
-    "Korean_Japan": "#e0e67f",
+    "Korean_Japan": "#000",
     "Brazil":"#33a02c",
     "Equatorial_Africa":"#386cb0",
     "Central_Asia":"#a6611a",
