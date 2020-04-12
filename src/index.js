@@ -1,4 +1,4 @@
-$( "#buttonHelp" ).on( "click", function()
+$( "#helpButton" ).on( "click", function()
 {
     createHelp();
 } );
