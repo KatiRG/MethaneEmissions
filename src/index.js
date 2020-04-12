@@ -437,7 +437,6 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
           }
     
           if (chart_div === "#chart_BU" && name_dict[d.name] === "Wetlands") {
-            console.log(d)
             //Tooltip
             div.transition()
               .style("opacity", .9);
