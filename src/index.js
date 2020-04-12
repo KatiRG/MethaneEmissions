@@ -232,7 +232,8 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
 
   function make(graph, minStat, maxStat) {          
     // Display info text for Sankey diagram
-    d3.select("#infotext").html("Methane source estimates over the period 2008&ndash;2017 from Top-Down (left) and Bottom-Up (right) approaches showing contributions (mean [min, max]) from 18 continental regions with respect to five broad source categories (Fossil fuel production & use, Agriculture & Waste, Biofuel & Biomass burning, Wetlands, and Other Natural sources). Total source estimates from the Bottom-Up approach are further classed into finer subcategories.")
+    d3.select("#infotext")
+      .html("Methane source estimates over the period 2008&ndash;2017 from Top-Down (left) and Bottom-Up (right) approaches showing contributions (mean [min, max]) from 18 continental regions with respect to five broad source categories (Fossil fuel production & use, Agriculture & Waste, Biofuel & Biomass burning, Wetlands, and Other Natural sources). Total source estimates from the Bottom-Up approach are further classed into finer subcategories. Data source: <a target='_blank' href='https://www.earth-syst-sci-data-discuss.net/essd-2019-128/'>Saunois et al. (2019)</a>.")
       .style("display", "block");
 
     var nodeMap = {};
