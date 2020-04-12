@@ -632,9 +632,9 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
       //For sources only
       var sub_displacement_dict = {
         "Coal": 0,
-        "GasAndOilIndustry": 29,
-        "Industry":35,
-        "Transport":40,
+        "GasAndOilIndustry": 42,
+        "Industry":124,
+        "Transport":107,
         "EntericFermentationAndManure": 96,
         "LandfillsAndWaste": 198,
         "Rice": 266,
