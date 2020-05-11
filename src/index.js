@@ -37,7 +37,7 @@ var BU_sourceStats = [
   {sourceName:"AgriWaste", mean:206, min:191, max:223},
   {sourceName:"BioBurBiof", mean: 30, min:26, max:40},
   {sourceName:"Wetlands", mean:149, min:102, max:182},
-  {sourceName:"OtherNatural", mean: 222, min:143, max:306}
+  {sourceName:"OtherNatural", mean: 209, min:143, max:306}
   ];
 
 // Regional stats. From sumSources in text files (see notebooks)
@@ -47,12 +47,12 @@ var BU_regionStats = [{sourceName: "USA", mean: 36, min: 29, max: 48}, {sourceNa
 
 //Top-down Sankey
 var chart_div1 = "#chart_TD",
-  jsonFile1 = "data/Sankey_TD_2008-2017_31mar2020_mean_noZeros.json";
+  jsonFile1 = "data/Sankey_TD_2008-2017_2mai2020_mean_noZeros.json";
 makeSankey(chart_div1, jsonFile1, TD_sourceStats, TD_regionStats);  
 
 //Bottum-up Sankey
 var chart_div2 = "#chart_BU",
-  jsonFile2 = "data/Sankey_BU_2008-2017_31mar2020_mean_3levels.json";
+  jsonFile2 = "data/Sankey_BU_2008-2017_2mai2020_mean_3levels.json";
 makeSankey(chart_div2, jsonFile2, BU_sourceStats, BU_regionStats);
 
 var minStat, maxStat; //objects to store min and max statistics
@@ -214,11 +214,11 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
   var minFile, maxFile;
 
   if (chart_div === "#chart_BU") {
-    minFile = "data/Sankey_BU_2008-2017_31mar2020_min_3levels.json";
-    maxFile = "data/Sankey_BU_2008-2017_31mar2020_max_3levels.json";
+    minFile = "data/Sankey_BU_2008-2017_2mai2020_min_3levels.json";
+    maxFile = "data/Sankey_BU_2008-2017_2mai2020_max_3levels.json";
   } else {
-    minFile = "data/Sankey_TD_2008-2017_31mar2020_min_noZeros.json";
-    maxFile = "data/Sankey_TD_2008-2017_31mar2020_max_noZeros.json";
+    minFile = "data/Sankey_TD_2008-2017_2mai2020_min_noZeros.json";
+    maxFile = "data/Sankey_TD_2008-2017_2mai2020_max_noZeros.json";
   }
 
   // load the data
