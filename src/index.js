@@ -26,18 +26,18 @@ $(window).resize(function(event){
 // Global stats for sources
 // Table 3 of preprint https://www.earth-syst-sci-data-discuss.net/essd-2019-128/
 var TD_sourceStats =   [
-  {sourceName:"Fossil", mean: 109, min:79, max:168},
-  {sourceName:"AgriWaste", mean: 219, min:175, max:239},
+  {sourceName:"Fossil", mean: 111, min:81, max:131},
+  {sourceName:"AgriWaste", mean: 217, min:207, max:240},
   {sourceName:"BioBurBiof", mean: 30, min:22, max:36},
-  {sourceName:"Wetlands", mean:178, min:155, max:200},
+  {sourceName:"Wetlands", mean:181, min:159, max:200},
   {sourceName:"OtherNatural", mean: 37, min:21, max:50}
   ];
 var BU_sourceStats = [
-  {sourceName:"Fossil", mean: 127, min:111, max:154},
+  {sourceName:"Fossil", mean: 128, min:113, max:154},
   {sourceName:"AgriWaste", mean:206, min:191, max:223},
   {sourceName:"BioBurBiof", mean: 30, min:26, max:40},
   {sourceName:"Wetlands", mean:149, min:102, max:182},
-  {sourceName:"OtherNatural", mean: 209, min:143, max:306}
+  {sourceName:"OtherNatural", mean: 222, min:143, max:306}
   ];
 
 // Regional stats. From sumSources in text files (see notebooks)
@@ -47,12 +47,12 @@ var BU_regionStats = [{sourceName: "USA", mean: 36, min: 29, max: 48}, {sourceNa
 
 //Top-down Sankey
 var chart_div1 = "#chart_TD",
-  jsonFile1 = "data/Sankey_TD_2008-2017_2mai2020_mean_noZeros.json";
+  jsonFile1 = "data/Sankey_TD_2008-2017_11mai2020_mean_2levels.json";
 makeSankey(chart_div1, jsonFile1, TD_sourceStats, TD_regionStats);  
 
 //Bottum-up Sankey
 var chart_div2 = "#chart_BU",
-  jsonFile2 = "data/Sankey_BU_2008-2017_2mai2020_mean_3levels.json";
+  jsonFile2 = "data/Sankey_BU_2008-2017_11mai2020_mean_3levels.json";
 makeSankey(chart_div2, jsonFile2, BU_sourceStats, BU_regionStats);
 
 var minStat, maxStat; //objects to store min and max statistics
@@ -214,11 +214,11 @@ function makeSankey(chart_div, jsonFile, sourceStats, regionStats) {
   var minFile, maxFile;
 
   if (chart_div === "#chart_BU") {
-    minFile = "data/Sankey_BU_2008-2017_2mai2020_min_3levels.json";
-    maxFile = "data/Sankey_BU_2008-2017_2mai2020_max_3levels.json";
+    minFile = "data/Sankey_BU_2008-2017_11mai2020_min_3levels.json";
+    maxFile = "data/Sankey_BU_2008-2017_11mai2020_max_3levels.json";
   } else {
-    minFile = "data/Sankey_TD_2008-2017_2mai2020_min_noZeros.json";
-    maxFile = "data/Sankey_TD_2008-2017_2mai2020_max_noZeros.json";
+    minFile = "data/Sankey_TD_2008-2017_11mai2020_min_2levels.json";
+    maxFile = "data/Sankey_TD_2008-2017_11mai2020_max_2levels.json";
   }
 
   // load the data
